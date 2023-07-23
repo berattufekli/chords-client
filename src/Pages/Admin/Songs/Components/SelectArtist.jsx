@@ -18,11 +18,11 @@ export default function SelectArtist({ artistValue, setArtistValue, artists }) {
             <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
               <span className="flex items-center">
                 {artistValue !== false ?
-                  <img src={`${imageProxy}/${artistValue.url}`} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                  <img src={artistValue.url} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
                   :
                   <div className="h-6 w-6 flex-shrink-0 rounded-full" />
                 }
-                <span className="ml-3 block truncate">{artistValue.name}</span>
+                <span className="ml-3 block truncate">{artistValue.artistName}</span>
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                 <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -51,11 +51,11 @@ export default function SelectArtist({ artistValue, setArtistValue, artists }) {
                     {({ selected, active }) => (
                       <>
                         <div className="flex items-center">
-                          <img src={`${imageProxy}/${artist.url}`} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
+                          <img src={artist.url} alt="" className="h-6 w-6 flex-shrink-0 rounded-full" />
                           <span
                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                           >
-                            {artist.name}
+                            {artist.artistName}
                           </span>
                         </div>
 

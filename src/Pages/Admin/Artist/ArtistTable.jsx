@@ -35,33 +35,37 @@ function ArtistTable() {
         </button>
       </div>
       <div className='overflow-x-auto'>
-        <table striped className="w-full text-sm text-center text-gray-500 dark:text-gray-400">
-          <tr className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <th scope="col" className="px-6 py-3">
-              id
-            </th>
-            <th scope="col" className="px-6 py-3">
-              İsim
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Açıklama
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Status
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Oluşturulma Tarihi
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Action
-            </th>
+        <table className="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+          <thead>
+            <tr className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <th scope="col" className="px-6 py-3">
+                id
+              </th>
+              <th scope="col" className="px-6 py-3">
+                İsim
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Açıklama
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Status
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Oluşturulma Tarihi
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Action
+              </th>
 
-          </tr>
-          {
-            artists.map((item, key) => {
-              return <ArtistRow key={key} item={item} />
-            })
-          }
+            </tr>
+          </thead>
+          <tbody>
+            {
+              artists.map((item, key) => {
+                return <ArtistRow key={key} item={item} />
+              })
+            }
+          </tbody>
         </table>
       </div>
     </div>

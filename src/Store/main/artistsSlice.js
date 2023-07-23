@@ -5,13 +5,14 @@ import {
 } from "@reduxjs/toolkit";
 import axiosConfig from "../features/axiosConfig";
 import { toastr } from "react-redux-toastr";
+import axios from "axios";
 
 export const getArtists = createAsyncThunk(
   "artists/getArtists",
   async () => {
     const response = await axiosConfig.get(`/api/artists`);
     // const response = await axios.get(`${proxy}/api/artists`)
-
+    console.log(response.data);
     let { data } = await response.data;
     return data;
   }
@@ -21,25 +22,9 @@ export const addArtist = createAsyncThunk(
   "artists/addArtist",
   async (artist, { dispatch, getState }) => {
     try {
-      let formData = new FormData();
 
-      formData.append("url", artist.url);
-      formData.append("artistName", artist.artistName);
-      formData.append("artistDescription", artist.artistDescription);
-      formData.append("type", artist.type);
-      formData.append("status", artist.status);
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          boundary: formData._boundaries,
-        },
-      };
+      const response = await axios.post('http://localhost:8080/api/artists', artist);
 
-      const response = await axiosConfig.post(
-        `/api/artists`,
-        formData,
-        config
-      );
       let { data } = await response.data;
       if (response.data.success === true) {
         toastr.success("Başarılı", "Kayıt Eklendi");
@@ -56,26 +41,11 @@ export const addArtist = createAsyncThunk(
 export const updateArtist = createAsyncThunk(
   "artists/updateArtist",
   async (artist, { dispatch, getState }) => {
-    let formData = new FormData();
 
-    formData.append("artistId", artist.artistId);
-    formData.append("url", artist.url);
-    formData.append("artistName", artist.artistName);
-    formData.append("artistDescription", artist.artistDescription);
-    formData.append("type", artist.type);
-    formData.append("status", artist.status);
-    const config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        boundary: formData._boundaries,
-      },
-    };
+    const response = await axios.put(
+      `http://localhost:8080/api/artists/${artist._id}`,
+      artist);
 
-    const response = await axiosConfig.put(
-      `/api/artists/${artist.artistId}`,
-      formData,
-      config
-    );
     const { data } = await response.data;
     if (response.data.success === true) {
       toastr.success("Başarılı", "Kayıt Güncellendi");
@@ -87,18 +57,20 @@ export const updateArtist = createAsyncThunk(
 
 export const removeArtist = createAsyncThunk(
   "artists/removeArtist",
-  async (artistId, { dispatch, getState }) => {
-    let response = await axiosConfig.delete(`/api/artists/${artistId}`);
+  async (artist, { dispatch, getState }) => {
+
+    const response = await axios.delete(
+      `http://localhost:8080/api/artists/${artist._id}`);
     if (response.data.success === true) {
       toastr.success("Başarılı", "Kayıt Silindi");
-      return artistId;
+      return artist._id;
     }
-    return artistId;
+    return null;
   }
 );
 
 const artistsAdapter = createEntityAdapter({
-  selectId: (artist) => artist.artistId,
+  selectId: (artist) => artist._id,
 });
 
 export const {

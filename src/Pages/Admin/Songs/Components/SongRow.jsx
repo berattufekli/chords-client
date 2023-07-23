@@ -8,27 +8,29 @@ import { imageProxy } from "Store/features/proxy";
 function SongRow({ item }) {
   const dispatch = useDispatch();
 
+  console.log(item.lyrics);
+
   const editData = React.useCallback(() => {
-    const sortedData = [...item.lyricsData].sort((a, b) => a.line - b.line);
+    
     dispatch(openEditSongDialog({
       ...item,
-      songLyrics: sortedData.map((item) => item.lyrics).join('\n'),
+      lyrics: item.lyrics.join('\n'),
     }));
   }, [dispatch, item]);
 
   return (
     <tr>
       <td>
-        <p className='font-bold'>{item.songId}</p>
+        <p className='font-bold'>{item._id}</p>
       </td>
       <td>
         <div className='flex items-center'>
           <img
             className="inline-block w-8 h-8 rounded-lg"
-            src={item.artistInfo && `${imageProxy}/${item.artistInfo.url}`}
+            src={item.artistInfo[0] && item.artistInfo[0].url}
             alt=""
           />
-          <p className='ml-3 font-bold'>{item.artistInfo && item.artistInfo.artistName}</p>
+          <p className='ml-3 font-bold'>{item.artistInfo[0] && item.artistInfo[0].artistName}</p>
         </div>
       </td>
       <td className="px-6 py-4">

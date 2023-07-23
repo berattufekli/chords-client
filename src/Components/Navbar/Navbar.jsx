@@ -26,7 +26,7 @@ export default function Navbar() {
               to={"/"}
               className="rounded-lg bg-transparent p-1 bg-indigo-800 text-indigo-100 hover:text-white transition-all"
             >
-              <p className='font-bold  text-sm'>Popüler Akorlar</p>
+              <p className='font-bold  text-sm'>Anasayfa</p>
             </Link>
 
             

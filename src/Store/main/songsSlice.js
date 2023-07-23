@@ -5,6 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import axiosConfig from "../features/axiosConfig";
 import { toastr } from "react-redux-toastr";
+import axios from "axios";
 
 export const getSongs = createAsyncThunk(
   "songs/getSongs",
@@ -21,26 +22,8 @@ export const addSong = createAsyncThunk(
   "songs/addSong",
   async (song, { dispatch, getState }) => {
     try {
-      let formData = new FormData();
+      const response = await axios.post('http://localhost:8080/api/songs', song);
 
-      formData.append("artistId", song.artistId);
-      formData.append("songName", song.songName);
-      formData.append("songAlbum", song.songAlbum);
-      formData.append("status", song.status);
-      formData.append("lyricsData", JSON.stringify(song.lyricsData));
-
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          boundary: formData._boundaries,
-        },
-      };
-
-      const response = await axiosConfig.post(
-        `/api/songs`,
-        formData,
-        config
-      );
       let { data } = await response.data;
       if (response.data.success === true) {
         toastr.success("Başarılı", "Kayıt Eklendi");
@@ -57,26 +40,10 @@ export const addSong = createAsyncThunk(
 export const updateSong = createAsyncThunk(
   "songs/updateSong",
   async (song, { dispatch, getState }) => {
-    let formData = new FormData();
+    const response = await axios.put(
+      `http://localhost:8080/api/songs/${song._id}`,
+      song);
 
-    formData.append("artistId", song.artistId);
-    formData.append("songName", song.songName);
-    formData.append("songAlbum", song.songAlbum);
-    formData.append("status", song.status);
-    formData.append("lyricsData", JSON.stringify(song.lyricsData));
-    
-    const config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        boundary: formData._boundaries,
-      },
-    };
-
-    const response = await axiosConfig.put(
-      `/api/songs/${song.songId}`,
-      formData,
-      config
-    );
     const { data } = await response.data;
     if (response.data.success === true) {
       toastr.success("Başarılı", "Kayıt Güncellendi");
@@ -99,7 +66,7 @@ export const removeSong = createAsyncThunk(
 );
 
 const songsAdapter = createEntityAdapter({
-  selectId: (song) => song.songId,
+  selectId: (song) => song._id,
 });
 
 export const {

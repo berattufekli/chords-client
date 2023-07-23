@@ -44,7 +44,7 @@ function SongsDashboard() {
 
   return (
     <div className='flex max-w-4xl my-10 m-auto'>
-      <div className='w-full bg-white  my-5 shadow-lg rounded-lg mx-2 xl:mx-0' >
+      <div className='w-full bg-white my-5 shadow-lg rounded-lg mx-2 xl:mx-0' >
         <Header />
         <div className='w-full h-[1px] bg-slate-200 rounded-sm'></div>
         <Settings />

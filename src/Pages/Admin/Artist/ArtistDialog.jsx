@@ -1,16 +1,14 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeEditArtistDialog } from 'Store/main/artistsSlice';
 import { closeNewArtistDialog } from 'Store/main/artistsSlice';
 import useForm from 'Hooks/useForm';
-import ImageUpload from 'Components/ImageUpload/ImageUpload';
-import { imageProxy } from "Store/features/proxy";
 import { addArtist } from 'Store/main/artistsSlice';
 import { updateArtist } from 'Store/main/artistsSlice';
 
 const defaultFormState = {
-  artistId: 0,
+  _id: '',
   artistName: "",
   artistDescription: "",
   url: "",
@@ -20,15 +18,6 @@ export default function ArtistDialog() {
   const dispatch = useDispatch();
 
   const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
-
-  const [photo, setphoto] = useState();
-
-  const handleSetImage = (file) => {
-    setphoto(file);
-    if (!file) {
-      setInForm("url", null);
-    }
-  };
 
   const artistDialog = useSelector(
     ({ artists }) => artists.artistDialog
@@ -81,18 +70,15 @@ export default function ArtistDialog() {
     if (artistDialog.type === "new") {
       let data = {
         ...form,
+        _id: null,
         status: "active",
-        url: photo,
       };
-      setphoto();
       dispatch(addArtist(data));
     } else {
       let data = {
         ...form,
         status: "active",
-        url: photo,
       };
-      setphoto();
       dispatch(updateArtist(data));
     }
     closeDialog();
@@ -136,10 +122,10 @@ export default function ArtistDialog() {
                       <div className="mt-1">
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
                           <input
-                            type="number"
-                            name="artistId"
-                            id="artistId"
-                            value={form.artistId}
+                            type="text"
+                            name="_id"
+                            id="_id"
+                            value={form._id}
                             onChange={handleChange}
                             disabled
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -186,17 +172,25 @@ export default function ArtistDialog() {
                       </div>
                     </div>
 
-
-
-
-
+                    <div className="col-span-full">
+                      <label htmlFor="username" className="block text-sm font- leading-6 text-gray-900">
+                        Fotoğraf URL'si
+                      </label>
+                      <div className="mt-1">
+                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                          <input
+                            type="text"
+                            name="url"
+                            id="url"
+                            value={form.url}
+                            onChange={handleChange}
+                            className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                            placeholder="Sanatçı Açıklamasını Giriniz"
+                          />
+                        </div>
+                      </div>
+                    </div>
                     
-
-                    <ImageUpload
-                      handleSetImage={handleSetImage}
-                      file={photo}
-                      url={form && form.url ? `${imageProxy}/${form.url}` : null}
-                    />
                   </div>
                 </div>
 

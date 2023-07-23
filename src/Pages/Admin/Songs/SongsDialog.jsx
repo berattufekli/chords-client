@@ -9,16 +9,19 @@ import { updateSong } from 'Store/main/songsSlice';
 import SelectArtist from './Components/SelectArtist';
 import { selectArtists } from 'Store/main/artistsSlice';
 
+
 const defaultFormState = {
-  songId: 0,
+  _id: "",
   songName: "",
   songAlbum: "",
-  songLyrics: "",
-  artistId: 0,
-  url: "",
+  lyrics: "",
+  artistId: "",
+  originalTone: "",
+  easyTone: "",
 };
 
 export default function SongDialog() {
+  
   const dispatch = useDispatch();
 
   const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
@@ -35,8 +38,6 @@ export default function SongDialog() {
      */
     if (songDialog.type === "edit" && songDialog.data) {
       setForm({ ...songDialog.data });
-
-      console.log(songDialog.data);
       const artist = artists.find(
         (f) => f.artistId === songDialog.data.artistInfo.artistId
       );
@@ -78,28 +79,25 @@ export default function SongDialog() {
 
   function handleSubmit(event) {
     event.preventDefault();
-
-
-
-
-
     if (songDialog.type === "new") {
-
       let data = {
         ...form,
+        _id: null,
         status: "active",
-        artistId: artistValue.id,
-        lyricsData: form.songLyrics.split("\n"),
+        artistId: artistValue._id,
+        lyrics: form.lyrics.split("\n"),
       };
       setArtistValue(false);
       dispatch(addSong(data));
+
     } else {
+
 
       let data = {
         ...form,
         status: "active",
-        artistId: artistValue.id,
-        lyricsData: form.songLyrics.split("\n"),
+        artistId: artistValue._id,
+        lyrics: form.lyrics.split("\n"),
       };
       setArtistValue(false);
       console.log(data);
@@ -146,10 +144,10 @@ export default function SongDialog() {
                       <div className="mt-1">
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
                           <input
-                            type="number"
-                            name="songId"
-                            id="songId"
-                            value={form.songId}
+                            type="text"
+                            name="_id"
+                            id="_id"
+                            value={form._id}
                             onChange={handleChange}
                             disabled
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -202,17 +200,55 @@ export default function SongDialog() {
 
                     <div className="col-span-full">
                       <label htmlFor="username" className="block text-sm font- leading-6 text-gray-900">
+                        Orijinal Ton
+                      </label>
+                      <div className="mt-1">
+                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                          <input
+                            type="text"
+                            name="originalTone"
+                            id="originalTone"
+                            value={form.originalTone}
+                            onChange={handleChange}
+                            className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                            placeholder="Orijinal Ton Giriniz"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-span-full">
+                      <label htmlFor="username" className="block text-sm font- leading-6 text-gray-900">
+                        Kolay Ton
+                      </label>
+                      <div className="mt-1">
+                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                          <input
+                            type="text"
+                            name="easyTone"
+                            id="easyTone"
+                            value={form.easyTone}
+                            onChange={handleChange}
+                            className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                            placeholder="Kolay Ton Giriniz"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-span-full">
+                      <label htmlFor="username" className="block text-sm font- leading-6 text-gray-900">
                         Şarkı Sözleri
                       </label>
                       <div className="mt-1">
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
                           <textarea
                             type="text"
-                            name="songLyrics"
-                            id="songLyrics"
+                            name="lyrics"
+                            id="lyrics"
                             rows={5}
                             style={{ resize: "none" }}
-                            value={form.songLyrics}
+                            value={form.lyrics}
                             onChange={handleChange}
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                             placeholder="Şarkı Sözleri Giriniz"

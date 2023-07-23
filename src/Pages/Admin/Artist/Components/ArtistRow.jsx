@@ -2,13 +2,10 @@ import React from 'react'
 import moment from "moment";
 import { openEditArtistDialog } from 'Store/main/artistsSlice';
 import { useDispatch } from 'react-redux';
-import { imageProxy } from "Store/features/proxy";
 
 function ArtistRow({ item }) {
 
   const dispatch = useDispatch();
-
-  console.log(item);
 
   const editData = React.useCallback(() => {
     dispatch(openEditArtistDialog(item));
@@ -17,13 +14,13 @@ function ArtistRow({ item }) {
   return (
     <tr>
       <td>
-        <p className='font-bold'>{item.artistId}</p>
+        <p className='font-bold'>{item._id}</p>
       </td>
       <td>
         <div className='flex items-center'>
           <img
             className="inline-block w-8 h-8 rounded-lg"
-            src={`${imageProxy}/${item.url}`}
+            src={item.url}
             alt=""
           />
           <p className='ml-3 font-bold'>{item.artistName}</p>

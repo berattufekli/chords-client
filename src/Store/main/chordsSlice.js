@@ -5,6 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import axiosConfig from "../features/axiosConfig";
 import { toastr } from "react-redux-toastr";
+import axios from "axios";
 
 export const getChords = createAsyncThunk(
   "chords/getChords",
@@ -21,10 +22,9 @@ export const addChord = createAsyncThunk(
   "chords/addChord",
   async (chord, { dispatch, getState }) => {
     try {
-      const response = await axiosConfig.post(
-        `/api/chords`,
-        chord,
-      );
+      console.log(chord);
+      const response = await axios.post('http://localhost:8080/api/chords', chord);
+
       let { data } = await response.data;
       if (response.data.success === true) {
         toastr.success("Başarılı", "Kayıt Eklendi");
@@ -63,7 +63,7 @@ export const removeChord = createAsyncThunk(
 );
 
 const chordsAdapter = createEntityAdapter({
-  selectId: (chord) => chord.chordId,
+  selectId: (chord) => chord._id,
 });
 
 export const {

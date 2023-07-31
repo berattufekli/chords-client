@@ -9,6 +9,7 @@ import Tones from './Components/Tones';
 import Settings from './Components/Settings';
 import { useParams } from 'react-router-dom';
 import NotFound from '../404/NotFound';
+import SpecialNote from './Components/SpecialNote';
 
 function SongsDashboard() {
   const { id } = useParams();
@@ -21,8 +22,8 @@ function SongsDashboard() {
     dispatch(getSongs())
       .then((params) => {
         try {
-          const song = params.payload.find((f) => f.id == id);
-          if(song === undefined){
+          const song = params.payload.find((f) => f._id === id);
+          if (song === undefined) {
             setNotFound(true);
           }
         } catch (error) {
@@ -48,6 +49,7 @@ function SongsDashboard() {
         <Header />
         <div className='w-full h-[1px] bg-slate-200 rounded-sm'></div>
         <Settings />
+        <SpecialNote />
         <div className='w-full h-[1px] bg-slate-200 rounded-sm'></div>
         <Tones tone={tone} setTone={setTone} />
         <div className='w-full h-[1px] bg-slate-200 rounded-sm'></div>

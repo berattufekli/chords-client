@@ -5,6 +5,7 @@ const applicationSlice = createSlice({
   initialState: {
     settings: {
       showChords: true,
+      showSpecialNote: false,
     },
 
   },
@@ -14,7 +15,8 @@ const applicationSlice = createSlice({
     },
     setDefault: (state, action) => {
       state.settings = {
-        showChords: true
+        showChords: true,
+        showSpecialNote: false,
       };
     },
   },

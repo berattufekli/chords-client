@@ -25,23 +25,27 @@ function SongChordsRow({ item }) {
   const dispatch = useDispatch();
 
   const editData = React.useCallback(() => {
-    const sortedData = [...item.lyricsData].sort((a, b) => a.line - b.line);
+    const lines = item.lyrics.map((lyric, key) => {
+      return { 
+        line: key, // Sıra numarasını eklemek için "key + 1" kullanılır
+        lyric
+      };
+    });
+
+
     const sortedLineChord = [...item.chordsData].sort((a, b) => a.line - b.line);
     const sortedPosition = sortedLineChord.sort((a, b) => a.position - b.position);
     dispatch(openEditSongChordDialog({
       ...item,
-      songLyrics: sortedData.map((item) => item.lyrics).join('\n'),
-      sortedLyrics: sortedData,
+      numberedLines: lines,
       chordsData: sortedPosition,
     }));
   }, [dispatch, item]);
 
-  console.log(item);
-
   return (
     <tr>
       <td>
-        <p className='font-bold'>{item.artistId}</p>
+        <p className='font-bold'>{item._id}</p>
       </td>
       <td className="px-6 py-4">
         <p className='font-bold'>{item.songName}</p>
@@ -66,7 +70,7 @@ function SongChordsRow({ item }) {
       <td>
         <Link
           to={
-            `/akor/${item.artistInfo.artistName.split(" ").join("-").toLowerCase().turkishtoEnglish()}/${item.songName.toLowerCase().turkishtoEnglish()}/${item.songId}`}>
+            `/akor/${item.artistInfo[0].artistName.split(" ").join("-").toLowerCase().turkishtoEnglish()}/${item.songName.toLowerCase().turkishtoEnglish()}/${item._id}`}>
           <button
             className="rounded-md bg-indigo-600 px-5 transition-all py-2 text-sm font-bold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >

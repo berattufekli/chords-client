@@ -19,15 +19,25 @@ function Lyrics({ tone, setTone }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const sortedLyrics = [...song.lyricsData].sort((a, b) => a.line - b.line);
+    const lines = song.lyrics.map((lyrics, key) => {
+      return { 
+        line: key, // Sıra numarasını eklemek için "key + 1" kullanılır
+        lyrics
+      };
+    });
+
     const sortedLineChord = [...song.chordsData].sort((a, b) => a.line - b.line);
-    setLyrics(sortedLyrics);
+    setLyrics(lines);
     setChords(sortedLineChord);
 
     const tone = ToneValues.find((f) => f.key === song.originalTone);
     setTone(tone);
+    
+  }, [song, setTone, dispatch])
+
+  useEffect(() => {
     dispatch(setDefault());
-  }, [song, setTone])
+  }, [id])
 
 
   if (!lyrics && !chords) {
@@ -52,7 +62,7 @@ function Lyrics({ tone, setTone }) {
               {
                 sortedFound.map((item, key) => {
                   if (settings.showChords) {
-                    const chord = song.chordInfo.find((f) => f.id === item.chordId)
+                    const chord = song.chordsInfo.find((f) => f._id === item.chordId)
 
                     if (tone.key === "Easy_tone") {
                       return <p
@@ -74,6 +84,8 @@ function Lyrics({ tone, setTone }) {
                       </p>
                     );
                   }
+
+                  return null;
                 })
               }
             </div>

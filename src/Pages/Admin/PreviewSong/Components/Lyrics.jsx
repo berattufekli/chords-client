@@ -13,9 +13,14 @@ function Lyrics() {
   const song = useSelector((state) => selectSongById(state, id))
   console.log(song);
   useEffect(() => {
-    const sortedLyrics = [...song.lyricsData].sort((a, b) => a.line - b.line);
+    const lines = song.lyrics.map((lyrics, key) => {
+      return { 
+        line: key, // Sıra numarasını eklemek için "key + 1" kullanılır
+        lyrics
+      };
+    });
     const sortedLineChord = [...song.chordsData].sort((a, b) => a.line - b.line);
-    setLyrics(sortedLyrics);
+    setLyrics(lines);
     setChords(sortedLineChord);
   }, [song])
 
@@ -41,7 +46,7 @@ function Lyrics() {
           return <div className='col-span-full'>
             <div className='w-full'>
               {sortedFound.map((item) => {
-                const chord = song.chordInfo.find((f) => f.id === item.chordId)
+                const chord = song.chordsInfo.find((f) => f._id === item.chordId)
                 return (
                   <p
                     style={{ transform: `translateX(${item.position}px)` }}

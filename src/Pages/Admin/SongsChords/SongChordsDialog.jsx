@@ -14,7 +14,7 @@ import { openEditSongChordDialog } from 'Store/main/songChordsSlice';
 
 
 const defaultFormState = {
-  songId: 0,
+  _id: 0,
   songName: "",
   songAlbum: "",
   songLyrics: "",
@@ -27,7 +27,7 @@ export default function SongChordsDialog() {
 
   const { form, handleChange, setForm } = useForm(defaultFormState);
 
-  const [lineValue, setLineValue] = useState(1);
+  const [lineValue, setLineValue] = useState(0);
   const [chordValue, setChordValue] = useState(false);
   const [editChordValue, setEditChordValue] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -38,7 +38,7 @@ export default function SongChordsDialog() {
   );
 
 
-
+  console.log(chordDialog.data);
 
   const initDialog = useCallback(() => {
     /**
@@ -48,7 +48,7 @@ export default function SongChordsDialog() {
       setForm({
         ...chordDialog.data,
       });
-      setLineValue(chordDialog.data.sortedLyrics[0]);
+      setLineValue(chordDialog.data.numberedLines[0]);
     }
 
     /**
@@ -120,37 +120,49 @@ export default function SongChordsDialog() {
   const handleSaveChords = () => {
     if (!editChordValue) {
       let data = {
-        songId: form.songId,
+        songId: form._id,
         line: lineValue.line,
-        chordId: chordValue.chordId,
+        chordId: chordValue._id,
         chordName: chordValue.chordName,
         position: position.x,
       }
+
+      console.log(data);
       setChordValue(false);
       setChordSelected(false);
       setPosition({ x: 0, y: 0 });
       dispatch(addSongChord(data)).then((songChord) => {
         dispatch(getSongs()).then((songs) => {
-          const song = songs.payload.find((item) => item.songId === songChord.payload.songId);
-          const sortedData = [...song.lyricsData].sort((a, b) => a.line - b.line);
-          const sortedLineChord = [...song.chordsData].sort((a, b) => a.line - b.line);
+
+          console.log("SC", songChord);
+          console.log("S", songs);
+          const song = songs.payload.find((item) => item._id === songChord.payload.songId);
+
+          const lines = song.lyrics.map((lyric, key) => {
+            return { 
+              line: key, // Sıra numarasını eklemek için "key + 1" kullanılır
+              lyric
+            };
+          });
+      
+      
+          const sortedLineChord = [song.chordsData].sort((a, b) => a.line - b.line);
           const sortedPosition = sortedLineChord.sort((a, b) => a.position - b.position);
           dispatch(openEditSongChordDialog({
             ...song,
-            songLyrics: sortedData.map((item) => item.lyrics).join('\n'),
-            sortedLyrics: sortedData,
+            numberedLines: lines,
             chordsData: sortedPosition,
           }));
-          setLineValue(songChord.payload.line);
+          setLineValue(chordDialog.data.numberedLines[0]);
         })
       });
 
     }
     else {
       let data = {
-        songId: form.songId,
-        line: lineValue.line,
-        chordId: editChordValue.chordId,
+        songId: form._id,
+
+        chordId: editChordValue._id,
         chordName: editChordValue.chordName,
         position: position.x,
       }
@@ -199,10 +211,10 @@ export default function SongChordsDialog() {
                       <div className="mt-1">
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
                           <input
-                            type="number"
-                            name="songId"
-                            id="songId"
-                            value={form.songId}
+                            type="text"
+                            name="_id"
+                            id="_id"
+                            value={form._id}
                             onChange={handleChange}
                             disabled
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -214,12 +226,16 @@ export default function SongChordsDialog() {
                     <div className="col-span-full">
                       {
                         chordDialog.data !== null &&
-                        <SelectLine lineValue={lineValue} setLineValue={setLineValue} lines={chordDialog.data.sortedLyrics} />
+                        <SelectLine lineValue={lineValue} setLineValue={setLineValue} lines={chordDialog.data.numberedLines} />
                       }
                     </div>
 
                     <div className='col-span-full'>
-                      <SelectChord chordValue={chordValue} setChordValue={setChordValue} chords={form.chordInfo} />
+                      {
+                        chordDialog.data !== null &&
+                        <SelectChord chordValue={chordValue} setChordValue={setChordValue} chords={chordDialog.data.chordsInfo} />
+
+                      }
                     </div>
 
                     <div className="col-span-full">
@@ -260,11 +276,12 @@ export default function SongChordsDialog() {
 
                           <div>
                             {
-                              chordDialog.data && chordDialog.data.chordsData.map((chord, key) => {
+                              chordDialog.data && chordDialog.data.chordsInfo && chordDialog.data.chordsData.map((chord, key) => {
+                                console.log("BERAT", chord);
 
+                                const { chordsInfo } = chordDialog.data;
 
-                                const { chordInfo } = chordDialog.data;
-                                const matchChord = chordInfo.find((f) => f.id === chord.chordId);
+                                const matchChord = chordsInfo.find((f) => f._id === chord.chordId);
 
                                 if (editChordValue !== false && editChordValue.songChordId === chord.songChordId) {
                                   return <Draggable
@@ -309,7 +326,7 @@ export default function SongChordsDialog() {
 
 
 
-                          <p className='font-semi-bold leading-3 text-gray-700'>{lineValue.lyrics}</p>
+                          <p className='font-semi-bold leading-3 text-gray-700'>{lineValue.lyric}</p>
                         </div>
                       </div>
                     </div>

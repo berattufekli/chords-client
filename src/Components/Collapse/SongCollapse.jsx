@@ -18,7 +18,7 @@ String.prototype.turkishtoEnglish = function () {
     .replace('ç', 'c');
 };
 
-function Collapse({ items, title, open }) {
+function SongCollapse({ items, title, open }) {
 
   const [isOpen, setIsOpen] = useState(open);
 
@@ -42,15 +42,16 @@ function Collapse({ items, title, open }) {
 
 
           {items.map((item, key) => {
+            console.log(item);
             if (isOpen) {
               return (
                 <Link key={key} to={
-                  `/akor/${item.artistInfo.artistName.split(" ").join("-").toLowerCase().turkishtoEnglish()}/${item.songName.toLowerCase().turkishtoEnglish()}/${item.songId}`}>
+                  `/akor/${item.artistInfo[0].artistName.split(" ").join("-").toLowerCase().turkishtoEnglish()}/${item.songName.toLowerCase().turkishtoEnglish()}/${item._id}`}>
                   <div className="group relative flex gap-x-6 rounded-lg p-4 items-center transition-all hover:bg-indigo-100">
                     <div className="flex overflow-hidden w-12 h-12 flex-none items-center justify-center rounded-lg">
                       <img
                         className="inline-block transition-all duration-500 group-hover:scale-125"
-                        src={`${imageProxy}/${item.artistInfo.url}`}
+                        src={item.artistInfo[0].url}
                         alt=""
                       />
                     </div>
@@ -59,7 +60,7 @@ function Collapse({ items, title, open }) {
                         {item.songName}
                         <span className="absolute inset-0" />
                       </p>
-                      <p className=" text-gray-500">{item.artistInfo.artistName}</p>
+                      <p className=" text-gray-500">{item.artistInfo[0].artistName}</p>
                     </div>
                   </div>
                 </Link>
@@ -74,4 +75,4 @@ function Collapse({ items, title, open }) {
   )
 }
 
-export default Collapse
+export default SongCollapse

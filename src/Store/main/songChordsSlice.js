@@ -5,11 +5,12 @@ import {
 } from "@reduxjs/toolkit";
 import axiosConfig from "../features/axiosConfig";
 import { toastr } from "react-redux-toastr";
+import axios from "axios";
 
 export const getSongChords = createAsyncThunk(
   "songChords/getSongChords",
   async () => {
-    const response = await axiosConfig.get(`/api/song-chords`);
+    const response = await axios.get('http://localhost:8080/api/song-chords');
     // const response = await axios.get(`${proxy}/api/chords`)
 
     let { data } = await response.data;
@@ -21,7 +22,8 @@ export const addSongChord = createAsyncThunk(
   "songChords/addSongChord",
   async (chord, { dispatch, getState }) => {
     try {
-      const response = await axiosConfig.post(`/api/song-chords`, chord);
+      const response = await axios.post('http://localhost:8080/api/song-chords', chord);
+
       let { data } = await response.data;
       if (response.data.success === true) {
         toastr.success("Başarılı", "Kayıt Eklendi");
@@ -60,7 +62,7 @@ export const removeSongChord = createAsyncThunk(
 );
 
 const songChordsAdapter = createEntityAdapter({
-  selectId: (chord) => chord.songChordId,
+  selectId: (chord) => chord._id,
 });
 
 export const {

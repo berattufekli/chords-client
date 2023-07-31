@@ -1,7 +1,7 @@
 import React from 'react'
-import Collapse from 'Components/Collapse/Collapse'
 import { useSelector } from 'react-redux'
 import { selectSongs } from 'Store/main/songsSlice'
+import SongCollapse from 'Components/Collapse/SongCollapse'
 
 
 function PopularChords() {
@@ -10,7 +10,7 @@ function PopularChords() {
 
   console.log(songs);
   return (
-    <Collapse title={"Popüler Akorlar"} items={songs} open={true}></Collapse>
+    <SongCollapse title={"Popüler Akorlar"} items={songs} open={true}></SongCollapse>
   )
 }
 

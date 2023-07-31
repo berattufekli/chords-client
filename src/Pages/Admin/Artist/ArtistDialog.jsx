@@ -129,7 +129,6 @@ export default function ArtistDialog() {
                             onChange={handleChange}
                             disabled
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                            placeholder="Sanatçı Adınız Giriniz"
                           />
                         </div>
                       </div>
@@ -147,7 +146,7 @@ export default function ArtistDialog() {
                             value={form.artistName}
                             onChange={handleChange}
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                            placeholder="Sanatçı Adınız Giriniz"
+                            placeholder="Sanatçı Adını Giriniz"
                           />
                         </div>
                       </div>
@@ -185,7 +184,7 @@ export default function ArtistDialog() {
                             value={form.url}
                             onChange={handleChange}
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                            placeholder="Sanatçı Açıklamasını Giriniz"
+                            placeholder="Sanatçı Fotoğraf URL'si Giriniz"
                           />
                         </div>
                       </div>

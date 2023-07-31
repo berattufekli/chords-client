@@ -8,9 +8,11 @@ function Header() {
   const {id} = useParams();
 
   const song = useSelector((state) => selectSongById(state, id))
+
+  console.log(song);
   return (
     <div>
-      <p className='font-bold text-gray-700 text-xl'>{song.artistInfo.artistName} - {song.songName}</p>
+      <p className='font-bold text-gray-700 text-xl'>{song.artistInfo[0].artistName} - {song.songName}</p>
     </div>
   )
 }

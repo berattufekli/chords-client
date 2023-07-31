@@ -11,8 +11,9 @@ import { selectSongs } from 'Store/main/songsSlice';
 import * as Transposer from 'chord-transposer';
 import ToneValues from 'Pages/Main/Songs/Components/ToneValues';
 
+
 const defaultFormState = {
-  chordId: 0,
+  _id: 0,
   chordNo: "",
   chordName: "",
   C_tone: "",
@@ -100,7 +101,7 @@ export default function ChordsDialog() {
 
     form.chordName.split(" ").map((item, key) => {
       const data = {
-        songId: songValue.id,
+        songId: songValue._id,
         chordNo: key + 1,
         chordName: item,
         C_tone: form.C_tone.split(" ")[key],
@@ -142,7 +143,7 @@ export default function ChordsDialog() {
     //   };
     //   dispatch(updateChord(data));
     // }
-    // closeDialog();
+    closeDialog();
   }
 
   return (
@@ -192,7 +193,6 @@ export default function ChordsDialog() {
                             onChange={handleChange}
                             disabled
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                            placeholder="Sanatçı Adınız Giriniz"
                           />
                         </div>
                       </div>
@@ -204,26 +204,7 @@ export default function ChordsDialog() {
 
                     <div className="col-span-full">
                       <label htmlFor="username" className="block text-sm font- leading-6 text-gray-900">
-                        Akor No
-                      </label>
-                      <div className="mt-1">
-                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
-                          <input
-                            type="text"
-                            name="chordNo"
-                            id="chordNo"
-                            value={form.chordNo}
-                            onChange={handleChange}
-                            className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                            placeholder="Akor No Giriniz"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-span-full">
-                      <label htmlFor="username" className="block text-sm font- leading-6 text-gray-900">
-                        Akor Adı
+                        Akorlar
                       </label>
                       <div className="mt-1">
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
@@ -234,7 +215,7 @@ export default function ChordsDialog() {
                             value={form.chordName}
                             onChange={handleChange}
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                            placeholder="Akor Adı Giriniz"
+                            placeholder="Akorları Boşluk Bırakarak Giriniz"
                           />
                         </div>
                       </div>

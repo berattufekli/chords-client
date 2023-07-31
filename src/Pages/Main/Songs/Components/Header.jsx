@@ -10,13 +10,17 @@ function Header() {
   const song = useSelector((state) => selectSongById(state, id))
   return (
     <div className='px-4 py-4'>
-      <div className='flex font-bold text-gray-700 text-xl'>
+      <div className='flex items-center gap-2 font-bold text-gray-700 text-xl'>
+        <img src={song.artistInfo[0].url} className='w-20 h-20 rounded-md mr-2'>
+        </img>
         <Link to={
-          `/artist/${song.artistInfo.artistName.split(" ").join("-").toLowerCase().turkishtoEnglish()}/${song.artistInfo.artistId}`}>
+          `/artist/${song.artistInfo[0].artistName.split(" ").join("-").toLowerCase().turkishtoEnglish()}/${song.artistInfo[0]._id}`}>
           <p className='transition-all hover:underline underline-offset-4 inline-block '>
-            {song.artistInfo.artistName}
+            {song.artistInfo[0].artistName}
           </p>
-        </Link> - {song.songName}
+        </Link>
+        <p>-</p>
+        <p>{song.songName}</p>
       </div>
 
 

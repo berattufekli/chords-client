@@ -1,15 +1,14 @@
 import React from 'react'
-import Collapse from 'Components/Collapse/Collapse'
 import { useSelector } from 'react-redux'
 import { selectSongs } from 'Store/main/songsSlice'
-
+import SongCollapse from 'Components/Collapse/SongCollapse';
 
 function RandomChords() {
 
   const songs = useSelector(selectSongs);
 
   return (
-    <Collapse title={"Deneme"} items={songs} open={false}></Collapse>
+    <SongCollapse title={"Deneme"} items={songs} open={false}></SongCollapse>
   )
 }
 

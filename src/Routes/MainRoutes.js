@@ -1,4 +1,5 @@
 import SingIn from "Pages/Auth/SignIn";
+import SignUp from "Pages/Auth/SignUp";
 import NotFound from "Pages/Main/404/NotFound";
 import ArtistDashboard from "Pages/Main/Artist/ArtistDashboard";
 import LandingDashboard from "Pages/Main/Landing/LandingDashboard";
@@ -39,10 +40,18 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Login",
-    route: "/giris-yap",
-    key: "Login",
+    name: "SignIn",
+    route: "/login",
+    key: "SignIn",
     component: <SingIn />,
+    noCollapse: true,
+  },
+  {
+    type: "collapse",
+    name: "SignUp",
+    route: "/register",
+    key: "SignUp",
+    component: <SignUp />,
     noCollapse: true,
   }
 

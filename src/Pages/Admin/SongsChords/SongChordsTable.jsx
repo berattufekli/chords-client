@@ -9,6 +9,8 @@ function SongChordsTable() {
 
   const songs = useSelector(selectSongs);
 
+  console.log(songs);
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-4">
       <div className="flex items-center justify-between content-center pb-4 bg-white dark:bg-gray-900">

@@ -47,6 +47,28 @@ export const login = createAsyncThunk(
   }
 );
 
+export const updateUserInformation = createAsyncThunk(
+  "auth/updateUserInformation",
+  async (user, { dispatch, getState }) => {
+    try {
+
+      const response = await axios.put(`http://localhost:8080/api/auth/update-user-information/${user.userId}`, user);
+
+      console.log(response);
+
+      let data = await response.data;
+      if (response.data.success) {
+        localStorage.setItem("token", data.access_token);
+        return { ...data, succes: true };
+      }
+    } catch (error) {
+      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
+
+      return null;
+    }
+  }
+);
+
 export const loadUser = createAsyncThunk(
   "auth/loadUser", async () => {
     try {
@@ -93,7 +115,7 @@ const artistsSlice = createSlice({
   initialState: {
     token: localStorage.getItem("token"),
     isAuthenticated: false,
-    userAuth: "admin",
+    userAuth: "student",
   },
   reducers: {},
   extraReducers: {
@@ -101,6 +123,7 @@ const artistsSlice = createSlice({
     [login.fulfilled]: (state, action) => action.payload,
     [loadUser.fulfilled]: (state, action) => action.payload,
     [logout.fulfilled]: (state, action) => action.payload,
+    [updateUserInformation.fulfilled]: (state, action) => action.payload,
   },
 });
 

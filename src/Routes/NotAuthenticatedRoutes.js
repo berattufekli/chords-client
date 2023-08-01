@@ -53,7 +53,8 @@ const routes = [
     key: "SignUp",
     component: <SignUp />,
     noCollapse: true,
-  }
+  },
+  
 
 ];
 

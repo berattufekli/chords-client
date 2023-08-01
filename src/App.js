@@ -2,7 +2,8 @@ import MainLayout from "./Layout/MainLayout";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 //Routes
-import MainRoutes from "./Routes/MainRoutes";
+import AuthenticatedRoutes from "./Routes/AuthenticatedRoutes";
+import NotAuthenticatedRoutes from "./Routes/NotAuthenticatedRoutes";
 import AdminRoutes from "./Routes/AdminRoutes";
 
 // application update
@@ -53,11 +54,10 @@ function App() {
     return <Loading />
   }
 
-  if (isAuthenticated === false || userAuth === "student") {
-    console.log("burası render edildi");
+  if (isAuthenticated === false) {
     return <MainLayout>
       <Routes>
-        {getRoutes(MainRoutes)}
+        {getRoutes(NotAuthenticatedRoutes)}
 
         {/* <Route path="*" element={<Navigate to="/dashboards/analytics" />} /> */}
         <Route path="*" element={<Navigate to="/" />} />
@@ -67,20 +67,32 @@ function App() {
 
 
   if (userAuth === "admin") {
+    return (
+      <AdminLayout>
+        <Routes>
+          {getRoutes(AdminRoutes)}
 
+          {/* <Route path="*" element={<Navigate to="/sanatcilar" />} /> */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </AdminLayout>
+    );
   }
 
-  return (
-    <AdminLayout>
+  if(userAuth === "student"){
+    console.log("student render redildi");
+    return <MainLayout>
       <Routes>
-        {getRoutes(AdminRoutes)}
+        {getRoutes(AuthenticatedRoutes)}
 
-        {/* <Route path="*" element={<Navigate to="/sanatcilar" />} /> */}
+        {/* <Route path="*" element={<Navigate to="/dashboards/analytics" />} /> */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </AdminLayout>
-  );
+    </MainLayout>
+  }
 
+  console.log("null render redildi");
+  return null;
 }
 
 export default App;

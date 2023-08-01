@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import MustLogin from './MustLogin';
 
 const defaultFormState = {
   _id: "",
@@ -17,19 +18,20 @@ const defaultFormState = {
 
 function SpecialNote() {
   const dispatch = useDispatch();
+  const { id } = useParams();
+
 
   const { settings } = useSelector((state) => state.applicationSlice);
-  const { form, handleChange, setForm } = useForm(defaultFormState);
-
-  const { id } = useParams();
   const { songNote } = useSelector((state) => selectSongById(state, id));
-  const { userId } = useSelector((state) => state.auth);
+  const { userId, isAuthenticated } = useSelector((state) => state.auth);
+
+  const { form, handleChange, setForm } = useForm(defaultFormState);
 
   useEffect(() => {
     if (songNote !== undefined && songNote[0]) {
       setForm(songNote[0]);
     }
-    else{
+    else {
       setForm(defaultFormState);
 
     }
@@ -100,7 +102,13 @@ function SpecialNote() {
     }
   }
 
+
+
   if (settings.showSpecialNote) {
+    if (!isAuthenticated) {
+      return <MustLogin />
+    }
+
     return (
       <div className='m-2 flex flex-col'>
         <ToastContainer />

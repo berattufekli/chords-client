@@ -38,7 +38,7 @@ export default function Navbar() {
 
           <div className="flex items-center justify-center">
             <Link
-              to={isAuthenticated ? "/profil" : "/login"}>
+              to={isAuthenticated ? "/hesap" : "/login"}>
               <UserIcon className="h-8 w-8 text-indigo-100 hover:text-white transition-all" aria-hidden="true" />
             </Link>
           </div>

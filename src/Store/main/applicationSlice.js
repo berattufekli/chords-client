@@ -6,6 +6,7 @@ const applicationSlice = createSlice({
     settings: {
       showChords: true,
       showSpecialNote: false,
+      showNewList: false,
     },
 
   },

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Lists from './Components/Lists'
+import Repertuars from './Components/Repertuars'
 import { useDispatch, useSelector } from 'react-redux'
 import { getListByUser } from 'Store/main/listsSlice';
 import Loading from 'Components/Loading/Loading';
-import { ToastContainer } from 'react-toastify';
 
-import 'react-toastify/dist/ReactToastify.css';
-function ListTab() {
+function RepertuarsTab() {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.auth);
 
@@ -23,10 +21,9 @@ function ListTab() {
 
   return (
     <div className='flex flex-col space-y-4'>
-      
-      <Lists />
+      <Repertuars title={"Listeler"} button={"Yeni Liste Ekle"} shadow={true}/>
     </div>
   )
 }
 
-export default ListTab
+export default RepertuarsTab

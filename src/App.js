@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Loading from "Components/Loading/Loading";
 import { loadUser } from "Store/auth/authSlice";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +28,8 @@ function App() {
     dispatch(loadUser()).then(() => {
       setTimeout(() => setLoading(false), 1000);
     });
+
+    console.log("burası çalıştı");
   }, [dispatch]);
 
   const getRoutes = (allRoutes) =>
@@ -50,25 +54,29 @@ function App() {
     }
     );
 
-  if (loading) {
-    return <Loading />
-  }
+  // if (loading) {
+  //   return <Loading />
+  // }
 
   if (isAuthenticated === false) {
-    return <MainLayout>
-      <Routes>
-        {getRoutes(NotAuthenticatedRoutes)}
-
-        {/* <Route path="*" element={<Navigate to="/dashboards/analytics" />} /> */}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </MainLayout>
+    return (
+      <MainLayout>
+        <ToastContainer />
+        <Routes>
+          {getRoutes(NotAuthenticatedRoutes)}
+        
+          {/* <Route path="*" element={<Navigate to="/dashboards/analytics" />} /> */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </MainLayout>
+    )
   }
 
 
   if (userAuth === "admin") {
     return (
       <AdminLayout>
+        <ToastContainer />
         <Routes>
           {getRoutes(AdminRoutes)}
 
@@ -79,16 +87,20 @@ function App() {
     );
   }
 
-  if(userAuth === "student"){
+  if (userAuth === "student") {
     console.log("student render redildi");
-    return <MainLayout>
-      <Routes>
-        {getRoutes(AuthenticatedRoutes)}
+    return (
+      <MainLayout>
+        <ToastContainer />
+        <Routes>
+          {getRoutes(AuthenticatedRoutes)}
 
-        {/* <Route path="*" element={<Navigate to="/dashboards/analytics" />} /> */}
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </MainLayout>
+          {/* <Route path="*" element={<Navigate to="/dashboards/analytics" />} /> */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </MainLayout>
+    )
+
   }
 
   console.log("null render redildi");

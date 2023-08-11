@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Tabs from './Components/Tabs'
 import ProfileTab from './Profile/ProfileTab';
-import ListTab from './List/ListTab';
+import RepertuarsTab from './Repertuars/RepertuarsTab';
 import SettingsTab from './Settings/SettingsTab';
 
 function AccountDashboard() {
@@ -17,7 +17,7 @@ function AccountDashboard() {
       case 0:
         return <ProfileTab />
       case 1:
-        return <ListTab />
+        return <RepertuarsTab />
       case 2:
         return <SettingsTab />
       default:

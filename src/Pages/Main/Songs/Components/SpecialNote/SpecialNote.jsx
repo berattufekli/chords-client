@@ -7,9 +7,9 @@ import { selectSongById } from 'Store/main/songsSlice';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import MustLogin from './MustLogin';
+import { toast } from 'react-toastify';
+
+import MustLogin from '../MustLogin';
 
 const defaultFormState = {
   _id: "",
@@ -35,7 +35,6 @@ function SpecialNote() {
       setForm(defaultFormState);
 
     }
-
   }, [songNote, setForm])
 
   const handleSaveNote = () => {
@@ -102,16 +101,13 @@ function SpecialNote() {
     }
   }
 
-
-
   if (settings.showSpecialNote) {
     if (!isAuthenticated) {
-      return <MustLogin />
+      return <MustLogin title={"Özel not"}/>
     }
 
     return (
       <div className='m-2 flex flex-col'>
-        <ToastContainer />
         <div >
           <textarea
             id="note"

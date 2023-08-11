@@ -18,12 +18,23 @@ export const getLists = createAsyncThunk(
   }
 );
 
+export const getListById = createAsyncThunk(
+  "lists/getListById",
+  async (listId) => {
+    const response = await axios.get(`http://localhost:8080/api/lists/${listId}`);
+    // const response = await axios.get(`${proxy}/api/songs`)
+
+    let { data } = await response.data;
+    return data;
+  }
+);
+
 export const getListByUser = createAsyncThunk(
   "lists/getListByUser",
   async (userId) => {
-    const response = await axios.get(`http://localhost:8080/api/lists/${userId}`);
+    const response = await axios.get(`http://localhost:8080/api/lists/user/${userId}`);
     // const response = await axios.get(`${proxy}/api/songs`)
-
+    console.log(response);
     let { data } = await response.data;
     return data;
   }
@@ -156,6 +167,7 @@ const listsSlice = createSlice({
       listsAdapter.removeOne(state, action.payload),
     [getLists.fulfilled]: listsAdapter.setAll,
     [getListByUser.fulfilled]: listsAdapter.setAll,
+    [getListById.fulfilled]: listsAdapter.setAll,
   },
 });
 

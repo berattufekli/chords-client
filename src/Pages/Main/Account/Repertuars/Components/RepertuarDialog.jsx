@@ -7,8 +7,7 @@ import { addList } from 'Store/main/listsSlice'
 import { closeEditListDialog } from 'Store/main/listsSlice'
 import { closeNewListDialog } from 'Store/main/listsSlice'
 import { updateList } from 'Store/main/listsSlice'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 const defaultFormState = {
   listName: "",
@@ -106,7 +105,6 @@ function NewList() {
 
   return (
     <div className=' space-y-2'>
-      <ToastContainer />
       <form>
         <div className='grid mt-4 grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4'>
           <div>

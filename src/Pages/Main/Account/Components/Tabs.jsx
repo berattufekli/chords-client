@@ -12,7 +12,7 @@ function Tabs({activeTab, handleActiveTab}) {
 
 
       <button onClick={() => handleActiveTab(1)} className={`${activeTab === 1 ? "border-b-indigo-700 text-indigo-700" : "border-b-transparent text-gray-600 hover:border-b-gray-400"} py-3 mx-1 text-lg font-bold transition-all border-b-2 `}>
-        Listeler
+        Repertuarlar
       </button>
 
       <button onClick={() => handleActiveTab(2)} className={`${activeTab === 2 ? "border-b-indigo-700 text-indigo-700" : "border-b-transparent text-gray-600 hover:border-b-gray-400"} py-3 mx-1 text-lg font-bold transition-all border-b-2 `}>

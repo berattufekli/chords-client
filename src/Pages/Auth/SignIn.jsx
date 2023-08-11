@@ -4,6 +4,7 @@ import { login } from 'Store/auth/authSlice'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const defaultFormState = {
   email: "",
@@ -17,11 +18,32 @@ export default function SingIn() {
   const { form, handleChange } = useForm(defaultFormState);
 
   const handleSubmit = () => {
-    dispatch(login(form)).then((params) => {
-      if(params.payload.success){
-        navigate("/");
-      }
-    })
+    try {
+      dispatch(login(form)).then((params) => {
+        if (params.payload === undefined) {
+          toast.error('Email ya da parola hatalı. Tekrar deneyiniz.', {
+            position: 'bottom-center',
+            autoClose: 3000, // 3 saniye sonra otomatik olarak kapanacak
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
+        else {
+          navigate("/");
+        }
+      })
+    } catch (error) {
+      toast.error('Sistem Hatası.', {
+        position: 'bottom-center',
+        autoClose: 3000, // 3 saniye sonra otomatik olarak kapanacak
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   }
 
   return (

@@ -9,7 +9,8 @@ import Tones from './Components/Tones';
 import Settings from './Components/Settings';
 import { useParams } from 'react-router-dom';
 import NotFound from '../404/NotFound';
-import SpecialNote from './Components/SpecialNote';
+import SpecialNote from './Components/SpecialNote/SpecialNote';
+import RepertuarList from './Components/Repertuar/RepertuarList';
 
 function SongsDashboard() {
   const { id } = useParams();
@@ -31,7 +32,6 @@ function SongsDashboard() {
         }
       })
       .then(() => setLoading(false)).then();
-
   }, [dispatch, id]);
 
   if (notFound) {
@@ -49,6 +49,7 @@ function SongsDashboard() {
         <Header />
         <div className='w-full h-[1px] bg-slate-200 rounded-sm'></div>
         <Settings />
+        <RepertuarList />
         <SpecialNote />
         <div className='w-full h-[1px] bg-slate-200 rounded-sm'></div>
         <Tones tone={tone} setTone={setTone} />

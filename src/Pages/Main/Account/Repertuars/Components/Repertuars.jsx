@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
-import NewList from './ListDialog'
+import React from 'react'
+import NewList from './RepertuarDialog'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLists } from 'Store/main/listsSlice';
-import ListItem from './ListItem';
+import ListItem from './RepertuarItem';
 import { openNewListDialog } from 'Store/main/listsSlice';
 import { closeNewListDialog } from 'Store/main/listsSlice';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { closeEditListDialog } from 'Store/main/listsSlice';
 
-function Lists() {
+function Repertuars({title, button, shadow}) {
   const dispatch = useDispatch();
   const lists = useSelector(selectLists);
 
@@ -17,22 +16,28 @@ function Lists() {
   console.log(listDialog)
 
   const handleShowList = () => {
-    dispatch(openNewListDialog());
+    if(listDialog.props.open){
+      dispatch(closeNewListDialog());
+      dispatch(closeEditListDialog());
+    }
+    else{
+      dispatch(openNewListDialog());
+    }
   };
 
 
 
   return (
-    <div className='bg-white rounded-lg shadow-lg px-4 space-y-2'>
+    <div className={`bg-white rounded-lg ${shadow ? "shadow-lg" : ""} px-4 space-y-2`}>
       
       <div className='flex justify-between my-2'>
-        <p className='font-bold py-2  text-gray-700 text-lg'>Listeler</p>
+        <p className='font-bold py-2  text-gray-700 text-lg'>{title}</p>
         <div className='flex items-center'>
           <button
             onClick={handleShowList}
             className="flex justify-center items-center rounded-md bg-indigo-600 px-7 py-1 text-sm font-semibold leading-6 text-white shadow-md transition-all hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Yeni Liste Oluştur
+            {button}
           </button>
         </div>
       </div>
@@ -45,9 +50,6 @@ function Lists() {
           </div>
         }
       </div>
-
-      <ToastContainer />
-
       <div>
         {
           lists.map((item, key) => {
@@ -59,4 +61,4 @@ function Lists() {
   )
 }
 
-export default Lists
+export default Repertuars

@@ -29,20 +29,20 @@ export const login = createAsyncThunk(
   "auth/login",
   async (user, { dispatch, getState }) => {
     try {
-
+      
       const response = await axios.post('http://localhost:8080/api/auth/login', user);
-
-      console.log(response);
-
+      
       let data = await response.data;
+      
+
       if (response.data.success) {
-        localStorage.setItem("token", data.access_token);
-        return data;
+        if(data){
+          localStorage.setItem("token", data.access_token);
+          return data;
+        }
       }
     } catch (error) {
       toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
-
-      return null;
     }
   }
 );
@@ -63,8 +63,6 @@ export const updateUserInformation = createAsyncThunk(
       }
     } catch (error) {
       toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
-
-      return null;
     }
   }
 );

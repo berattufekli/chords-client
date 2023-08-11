@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-function MustLogin() {
+function MustLogin({ title }) {
   return (
     <div className='m-2 flex flex-col'>
-      <p className='text-gray-600 font-semibold'>Özel not kaydedebilmek için giriş yapmanız gerekmektedir</p>
+      <p className='text-gray-600 font-semibold'>{title} eklemek için giriş yapmanız gerekmektedir</p>
 
       <div>
         <Link to={"/login"}>

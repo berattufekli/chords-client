@@ -3,6 +3,7 @@ import SignUp from "Pages/Auth/SignUp";
 import NotFound from "Pages/Main/404/NotFound";
 import ArtistDashboard from "Pages/Main/Artist/ArtistDashboard";
 import LandingDashboard from "Pages/Main/Landing/LandingDashboard";
+import RepertuarDashboard from "Pages/Main/Repertuar/RepertuarDashboard";
 import SongsDashboard from "Pages/Main/Songs/SongsDashboard";
 
 const routes = [
@@ -54,8 +55,14 @@ const routes = [
     component: <SignUp />,
     noCollapse: true,
   },
-  
-
+  {
+    type: "collapse",
+    name: "Repertuar",
+    route: "/repertuar/:id",
+    key: "Repertuar",
+    component: <RepertuarDashboard />,
+    noCollapse: true,
+  },
 ];
 
 export default routes;

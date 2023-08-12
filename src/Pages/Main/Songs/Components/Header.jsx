@@ -30,12 +30,12 @@ function Header() {
   return (
     <div className='px-4 py-4'>
       <div className='flex items-center gap-2 font-bold text-gray-700 text-xl'>
-        <img alt={song.artistInfo[0].artistName} src={song.artistInfo[0].url} className='w-20 h-20 rounded-md mr-2'>
+        <img alt={song.artistInfo.artistName} src={song.artistInfo.url} className='w-20 h-20 rounded-md mr-2'>
         </img>
         <Link to={
-          `/artist/${turkishtoEnglish(song.artistInfo[0].artistName.split(" ").join("-").toLowerCase())}/${song.artistInfo[0]._id}`}>
+          `/artist/${turkishtoEnglish(song.artistInfo.artistName.split(" ").join("-").toLowerCase())}/${song.artistInfo.artistId}`}>
           <p className='transition-all hover:underline underline-offset-4 inline-block '>
-            {song.artistInfo[0].artistName}
+            {song.artistInfo.artistName}
           </p>
         </Link>
         <p>-</p>

@@ -62,7 +62,7 @@ function Lyrics({ tone, setTone }) {
               {
                 sortedFound.map((item, key) => {
                   if (settings.showChords) {
-                    const chord = song.chordsInfo.find((f) => f._id === item.chordId)
+                    const chord = song.chordsInfo.find((f) => f.chordId === item.chordId)
 
                     if (tone.key === "Easy_tone") {
                       return <p

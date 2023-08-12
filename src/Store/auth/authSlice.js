@@ -57,8 +57,6 @@ export const login = createAsyncThunk(
       );
       const firebaseUser = userCredential.user;
 
-      console.log(firebaseUser);
-
       // Kullanıcının Firestore'dan verilerini alın
       const usersCollection = collection(db, "userData");
       const q = query(usersCollection, where("userId", "==", firebaseUser.uid));
@@ -138,6 +136,7 @@ export const loadUser = createAsyncThunk(
 export const logout = createAsyncThunk("auth/logout", async () => {
   try {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     return {
       token: null,
       isAuthenticated: false,

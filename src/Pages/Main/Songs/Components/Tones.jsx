@@ -8,7 +8,7 @@ function Tones({ tone, setTone }) {
       {
         ToneValues.map((item, key) => {
           if (item.key === tone.key) {
-            return <button key={key} className="rounded-md w-8 h-8 mr-2 my-2 bg-indigo-600 transition-all  text-sm font-bold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={() => setTone(item)}>
+            return <button key={key} className="rounded-md w-8 h-8 mr-1 my-2 bg-indigo-600 transition-all  text-sm font-bold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" onClick={() => setTone(item)}>
               {item.name}
             </button>
           }

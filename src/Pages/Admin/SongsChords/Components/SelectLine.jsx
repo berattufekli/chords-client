@@ -52,7 +52,7 @@ export default function SelectLine({ lineValue, setLineValue, lines }) {
                           <span
                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                           >
-                            {line.line} - {line.lyric}
+                            {line.line + 1} - {line.lyric}
                           </span>
                         </div>
 

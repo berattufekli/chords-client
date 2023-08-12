@@ -14,7 +14,7 @@ import { openEditSongChordDialog } from 'Store/main/songChordsSlice';
 
 
 const defaultFormState = {
-  _id: 0,
+  songChordId: 0,
   songName: "",
   songAlbum: "",
   songLyrics: "",
@@ -120,9 +120,9 @@ export default function SongChordsDialog() {
   const handleSaveChords = () => {
     if (!editChordValue) {
       let data = {
-        songId: form._id,
+        songId: form.songId,
         line: lineValue.line,
-        chordId: chordValue._id,
+        chordId: chordValue.chordId,
         chordName: chordValue.chordName,
         position: position.x,
       }
@@ -136,16 +136,16 @@ export default function SongChordsDialog() {
 
           console.log("SC", songChord);
           console.log("S", songs);
-          const song = songs.payload.find((item) => item._id === songChord.payload.songId);
+          const song = songs.payload.find((item) => item.songId === songChord.payload.songId);
 
           const lines = song.lyrics.map((lyric, key) => {
-            return { 
+            return {
               line: key, // Sıra numarasını eklemek için "key + 1" kullanılır
               lyric
             };
           });
-      
-      
+
+
           const sortedLineChord = [song.chordsData].sort((a, b) => a.line - b.line);
           const sortedPosition = sortedLineChord.sort((a, b) => a.position - b.position);
           dispatch(openEditSongChordDialog({
@@ -212,13 +212,13 @@ export default function SongChordsDialog() {
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
                           <input
                             type="text"
-                            name="_id"
-                            id="_id"
-                            value={form._id}
+                            name="songChordId"
+                            id="songChordId"
+                            value={form.songChordId}
                             onChange={handleChange}
                             disabled
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                            placeholder="Sanatçı Adınız Giriniz"
+                            placeholder="Şarkı Akor ID Giriniz"
                           />
                         </div>
                       </div>
@@ -281,7 +281,7 @@ export default function SongChordsDialog() {
 
                                 const { chordsInfo } = chordDialog.data;
 
-                                const matchChord = chordsInfo.find((f) => f._id === chord.chordId);
+                                const matchChord = chordsInfo.find((f) => f.chordId === chord.chordId);
 
                                 if (editChordValue !== false && editChordValue.songChordId === chord.songChordId) {
                                   return <Draggable

@@ -12,7 +12,7 @@ function Header() {
   console.log(song);
   return (
     <div>
-      <p className='font-bold text-gray-700 text-xl'>{song.artistInfo[0].artistName} - {song.songName}</p>
+      <p className='font-bold text-gray-700 text-xl'>{song.artistInfo.artistName} - {song.songName}</p>
     </div>
   )
 }

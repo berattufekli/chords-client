@@ -23,7 +23,7 @@ function SongsDashboard() {
     dispatch(getSongs())
       .then((params) => {
         try {
-          const song = params.payload.find((f) => f._id === id);
+          const song = params.payload.find((f) => f.songId === id);
           if (song === undefined) {
             setNotFound(true);
           }

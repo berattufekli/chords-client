@@ -45,7 +45,7 @@ function SongChordsRow({ item }) {
   return (
     <tr>
       <td>
-        <p className='font-bold'>{item._id}</p>
+        <p className='font-bold'>{item.songId}</p>
       </td>
       <td className="px-6 py-4">
         <p className='font-bold'>{item.songName}</p>
@@ -70,7 +70,7 @@ function SongChordsRow({ item }) {
       <td>
         <Link
           to={
-            `/akor/${turkishtoEnglish(item.artistInfo[0].artistName.split(" ").join("-").toLowerCase())}/${turkishtoEnglish(item.songName.toLowerCase())}/${item._id}`}>
+            `/akor/${turkishtoEnglish(item.artistInfo.artistName.split(" ").join("-").toLowerCase())}/${turkishtoEnglish(item.songName.toLowerCase().split(" ").join("-"))}/${item.songId}`}>
           <button
             className="rounded-md bg-indigo-600 px-5 transition-all py-2 text-sm font-bold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >

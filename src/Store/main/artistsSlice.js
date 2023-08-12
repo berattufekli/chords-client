@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import { toastr } from "react-redux-toastr";
 import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
-import { collection, addDoc, updateDoc, deleteDoc, getDocs, doc } from "firebase/firestore";
+import { collection, updateDoc, deleteDoc, getDocs, doc, setDoc } from "firebase/firestore";
 import { uid } from 'uid';
 
 export const getArtists = createAsyncThunk(
@@ -29,11 +29,11 @@ export const addArtist = createAsyncThunk(
     try {
       let artistData = {
         ...artist,
-        artistId: uid(16),
+        artistId: uid(24),
         createdDate: Date.now(),
       }
-      const artistsCollection = collection(db, "artists");
-      await addDoc(artistsCollection, artistData);
+      const artistDocRef = doc(db, "artists", artistData.artistId);
+      await setDoc(artistDocRef, artistData);
 
       toastr.success("Başarılı", "Kayıt Eklendi");
       return { ...artistData, success: true };
@@ -64,10 +64,10 @@ export const removeArtist = createAsyncThunk(
   async (artist, { dispatch, getState }) => {
     try {
       const artistsCollection = collection(db, "artists");
-      await deleteDoc(artistsCollection, artist.id);
+      await deleteDoc(artistsCollection, artist.artistId);
 
       toastr.success("Başarılı", "Kayıt Silindi");
-      return artist.id;
+      return artist.artistId;
     } catch (error) {
       toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
       return null;

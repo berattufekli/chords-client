@@ -3,18 +3,24 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from "@reduxjs/toolkit";
-import axiosConfig from "../features/axiosConfig";
 import { toastr } from "react-redux-toastr";
-import axios from "axios";
+import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
+import { collection, updateDoc, deleteDoc, getDocs, doc, setDoc } from "firebase/firestore";
+import { uid } from 'uid';
+
 
 export const getChords = createAsyncThunk(
   "chords/getChords",
   async () => {
-    const response = await axiosConfig.get(`/api/chords`);
-    // const response = await axios.get(`${proxy}/api/chords`)
+    const chordsCollection = collection(db, "chords");
+    const querySnapshot = await getDocs(chordsCollection);
 
-    let { data } = await response.data;
-    return data;
+    const chordsData = [];
+    querySnapshot.forEach((doc) => {
+      chordsData.push({ ...doc.data() });
+    });
+
+    return chordsData;
   }
 );
 
@@ -22,16 +28,17 @@ export const addChord = createAsyncThunk(
   "chords/addChord",
   async (chord, { dispatch, getState }) => {
     try {
-      console.log(chord);
-      const response = await axios.post('http://localhost:8080/api/chords', chord);
+      let chordData = {
+        ...chord,
+        chordId: uid(24),
+        createdDate: Date.now(),
+      };
+      const chordDocRef = doc(db, "chords", chordData.chordId);
+      await setDoc(chordDocRef, chordData);
 
-      let { data } = await response.data;
-      if (response.data.success === true) {
-        toastr.success("Başarılı", "Kayıt Eklendi");
-        return data;
-      }
+      return { ...chordData, success: true };
     } catch (error) {
-      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
+      console.log(error);
       return null;
     }
   }
@@ -40,30 +47,36 @@ export const addChord = createAsyncThunk(
 export const updateChord = createAsyncThunk(
   "chords/updateChord",
   async (chord, { dispatch, getState }) => {
-    const response = await axiosConfig.put(`/api/chords/${chord.chordId}`, chord);
-    const { data } = await response.data;
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Güncellendi");
-      return data;
+    try {
+      const chordRef = doc(db, "chords", chord.chordId);
+      await updateDoc(chordRef, chord);
+
+      toastr.success("Başarılı", "Akor Güncellendi");
+      return chord;
+    } catch (error) {
+      console.log(error);
     }
-    return null;
   }
 );
 
 export const removeChord = createAsyncThunk(
   "chords/removeChord",
-  async (chordId, { dispatch, getState }) => {
-    let response = await axiosConfig.delete(`/api/chords/${chordId}`);
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Silindi");
-      return chordId;
+  async (chord, { dispatch, getState }) => {
+    try {
+      const chordsCollection = collection(db, "chords");
+      await deleteDoc(chordsCollection, chord.chordId);
+
+      toastr.success("Başarılı", "Akor Silindi");
+      return chord.chordId;
+    } catch (error) {
+      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
+      return null;
     }
-    return chordId;
   }
 );
 
 const chordsAdapter = createEntityAdapter({
-  selectId: (chord) => chord._id,
+  selectId: (chord) => chord.chordId,
 });
 
 export const {

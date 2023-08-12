@@ -3,10 +3,10 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from "@reduxjs/toolkit";
-import { toastr } from "react-redux-toastr";
 import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
-import { collection, addDoc, updateDoc, deleteDoc, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, updateDoc, deleteDoc, getDocs, doc, getDoc, setDoc, query, where } from "firebase/firestore";
 import { uid } from 'uid';
+
 
 
 export const getSongs = createAsyncThunk("songs/getSongs", async () => {
@@ -16,20 +16,41 @@ export const getSongs = createAsyncThunk("songs/getSongs", async () => {
   const songsData = [];
   const promises = querySnapshot.docs.map(async (songDoc) => {
     const songData = songDoc.data();
+    const songId = songData.songId;
+
+    //artist info getirme
     const artistId = songData.artistId;
-    console.log("artisid", artistId);
     const artistDocRef = doc(db, "artists", artistId);
     const artistDocSnap = await getDoc(artistDocRef);
     const artistData = artistDocSnap.data();
 
-    // Şarkı ve sanatçı bilgilerini birleştirin
-    const songWithArtist = { ...songData, artistInfo: artistData };
+    //chords data getirme
+    const chordsInfo = [];
+    
+    const chordsCollectionRef = collection(db, 'chords');
+    const chordsQuery = query(chordsCollectionRef, where('songId', '==', songId));
+    const chordsQuerySnapshot = await getDocs(chordsQuery);
+    chordsQuerySnapshot.forEach((doc) => {
+      chordsInfo.push(doc.data());
+    });
+
+    //song chords data getirme
+    const chordsData = [];
+    const songChordsCollectionRef = collection(db, 'songChords');
+    const songChordsQuery = query(songChordsCollectionRef, where('songId', '==', songId));
+    const songChordsSnapshot = await getDocs(songChordsQuery);
+    songChordsSnapshot.forEach((doc) => {
+      chordsData.push(doc.data());
+    });
+
+    //şarkı bilgilerini birleştir
+    const songWithArtist = { ...songData, artistInfo: artistData, artistId: artistId, chordsInfo, chordsData };
     songsData.push(songWithArtist);
   });
 
-  console.log(songsData);
+  await Promise.all(promises); // Tüm asenkron işlemleri bekleyin
 
-  await Promise.all(promises);
+  console.log(songsData);
 
   return songsData;
 });
@@ -40,18 +61,19 @@ export const addSong = createAsyncThunk(
     try {
       let songData = {
         ...song,
-        songId: uid(16),
+        songId: uid(24),
         createdDate: Date.now(),
       }
 
-      console.log(songData);
-      const songsCollection = collection(db, "songs");
-      await addDoc(songsCollection, songData);
+      const songsCollection = doc(db, "songs", songData.songId);
+      await setDoc(songsCollection, songData);
 
-      toastr.success("Başarılı", "Şarkı Eklendi");
-      return { ...songData, success: true };
+      const artistDocRef = doc(db, "artists", songData.artistId);
+      const artistDocSnap = await getDoc(artistDocRef);
+      const artistData = artistDocSnap.data();
+
+      return { ...songData, artistInfo: artistData, success: true };
     } catch (error) {
-      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
       return null;
     }
   }
@@ -61,12 +83,27 @@ export const updateSong = createAsyncThunk(
   "songs/updateSong",
   async (song, { dispatch, getState }) => {
     try {
-      console.log(song);
-      const songRef = doc(db, "songs", song.id); // Belge referansı
-      await updateDoc(songRef, song);
+      let songData = {
+        artistId: song.artistId,
+        songName: song.songName,
+        songAlbum: song.songAlbum,
+        originalTone: song.originalTone,
+        easyTone: song.easyTone,
+        status: song.status,
+        createdDate: song.createdDate,
+        songId: song.songId,
+        lyrics: song.lyrics,
+      };
 
-      toastr.success("Başarılı", "Şarkı Güncellendi");
-      return song;
+      console.log(songData);
+      const songRef = doc(db, "songs", song.songId); // Belge referansı
+      await updateDoc(songRef, songData);
+
+      const artistDocRef = doc(db, "artists", song.artistId);
+      const artistDocSnap = await getDoc(artistDocRef);
+      const artistData = artistDocSnap.data();
+
+      return { ...songData, artistInfo: artistData, success: true };
     } catch (error) {
       console.log(error);
     }
@@ -80,10 +117,8 @@ export const removeSong = createAsyncThunk(
       const songsCollection = collection(db, "songs");
       await deleteDoc(songsCollection, song.id);
 
-      toastr.success("Başarılı", "Şarkı Silindi");
       return song.id;
     } catch (error) {
-      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
       return null;
     }
   }

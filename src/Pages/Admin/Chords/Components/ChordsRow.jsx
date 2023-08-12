@@ -15,7 +15,7 @@ function ChordsRow({ item }) {
   return (
     <tr>
       <td className='py-4'>
-        <p className='font-bold'>{item._id}</p>
+        <p className='font-bold'>{item.chordId}</p>
       </td>
       <td>
         <p className='font-bold text-red-500'>{item.chordNo}</p>

@@ -46,7 +46,7 @@ function Lyrics() {
           return <div className='col-span-full'>
             <div className='w-full'>
               {sortedFound.map((item) => {
-                const chord = song.chordsInfo.find((f) => f._id === item.chordId)
+                const chord = song.chordsInfo.find((f) => f.chordId === item.chordId)
                 return (
                   <p
                     style={{ transform: `translateX(${item.position}px)` }}

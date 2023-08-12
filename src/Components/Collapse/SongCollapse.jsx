@@ -46,12 +46,12 @@ function SongCollapse({ items, title, open }) {
             if (isOpen) {
               return (
                 <Link key={key} to={
-                  `/akor/${turkishtoEnglish(item.artistInfo[0].artistName.split(" ").join("-").toLowerCase())}/${item.songName.toLowerCase().turkishtoEnglish()}/${item._id}`}>
+                  `/akor/${turkishtoEnglish(item.artistInfo.artistName.split(" ").join("-").toLowerCase())}/${turkishtoEnglish(item.songName.toLowerCase())}/${item.songId}`}>
                   <div className="group relative flex gap-x-6 rounded-lg p-4 items-center transition-all hover:bg-indigo-100">
                     <div className="flex overflow-hidden w-12 h-12 flex-none items-center justify-center rounded-lg">
                       <img
                         className="inline-block transition-all duration-500 group-hover:scale-125"
-                        src={item.artistInfo[0].url}
+                        src={item.artistInfo.url}
                         alt=""
                       />
                     </div>
@@ -60,7 +60,7 @@ function SongCollapse({ items, title, open }) {
                         {item.songName}
                         <span className="absolute inset-0" />
                       </p>
-                      <p className=" text-gray-500">{item.artistInfo[0].artistName}</p>
+                      <p className=" text-gray-500">{item.artistInfo.artistName}</p>
                     </div>
                   </div>
                 </Link>

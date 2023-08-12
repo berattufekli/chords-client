@@ -12,7 +12,7 @@ import ToneValues from 'Pages/Main/Songs/Components/ToneValues';
 
 
 const defaultFormState = {
-  _id: 0,
+  chordId: 0,
   chordNo: "",
   chordName: "",
   C_tone: "",
@@ -101,7 +101,7 @@ export default function ChordsDialog() {
 
     form.chordName.split(" ").map((item, key) => {
       const data = {
-        songId: songValue._id,
+        songId: songValue.songId,
         chordNo: key + 1,
         chordName: item,
         C_tone: form.C_tone.split(" ")[key],

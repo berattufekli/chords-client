@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Table } from 'flowbite-react';
 import ChordsRow from './Components/ChordsRow';
 import { openNewChordDialog } from 'Store/main/chordsSlice';
 import { selectChords } from 'Store/main/chordsSlice';

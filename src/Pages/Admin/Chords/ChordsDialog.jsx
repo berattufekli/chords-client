@@ -5,7 +5,6 @@ import useForm from 'Hooks/useForm';
 import { closeEditChordDialog } from 'Store/main/chordsSlice';
 import { closeNewChordDialog } from 'Store/main/chordsSlice';
 import { addChord } from 'Store/main/chordsSlice';
-import { updateChord } from 'Store/main/chordsSlice';
 import SelectSong from './Components/SelectSong';
 import { selectSongs } from 'Store/main/songsSlice';
 import * as Transposer from 'chord-transposer';
@@ -93,6 +92,7 @@ export default function ChordsDialog() {
     ToneValues.map((tone) => {
       setInForm(tone.key, Transposer.transpose(form.chordName).toKey(tone.name).toString().replace(/\s{2,}/g, " "));
       console.log(Transposer.transpose(form.chordName).toKey(tone.name).toString());
+      return true;
     });
   }
 
@@ -126,6 +126,7 @@ export default function ChordsDialog() {
 
       console.log(data);
       dispatch(addChord(data));
+      return true;
     })
 
     // if (chordDialog.type === "new") {

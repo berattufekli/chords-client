@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from "moment";
-import { Table } from 'flowbite-react';
 import { useDispatch } from 'react-redux';
 import { openEditChordDialog } from 'Store/main/chordsSlice';
 

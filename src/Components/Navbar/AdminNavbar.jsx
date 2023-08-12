@@ -1,5 +1,5 @@
 
-import { EnvelopeIcon, ArrowRightOnRectangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { ArrowRightOnRectangleIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { logout } from 'Store/auth/authSlice';
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
@@ -44,7 +44,7 @@ export default function AdminNavbar() {
               <p className="text-gray-500 text-sm font-bold">{name} {surname}</p>
               <p className='text-right text-xs font-semibold text-gray-400'>{userAuth}</p>
             </div>
-            <img className='w-12 h-12 rounded-lg' src={"https://yt3.googleusercontent.com/2NrF3qN2o7lCmOr9Q0xSvX9taGoPMRDK0B8QZsFblxJsjGpttvfdyVwYhzisyBY7PPW4IWxF9A=s900-c-k-c0x00ffffff-no-rj"} />
+            <img className='w-12 h-12 rounded-lg' alt={"user"} src={"https://yt3.googleusercontent.com/2NrF3qN2o7lCmOr9Q0xSvX9taGoPMRDK0B8QZsFblxJsjGpttvfdyVwYhzisyBY7PPW4IWxF9A=s900-c-k-c0x00ffffff-no-rj"} />
 
             <div className='w-1 rounded-lg h-8 bg-gray-300'></div>
 

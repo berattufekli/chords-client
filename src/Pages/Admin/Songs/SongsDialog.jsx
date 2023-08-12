@@ -24,7 +24,7 @@ export default function SongDialog() {
   
   const dispatch = useDispatch();
 
-  const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
+  const { form, handleChange, setForm } = useForm(defaultFormState);
 
   const artists = useSelector(selectArtists);
   const [artistValue, setArtistValue] = useState(false);

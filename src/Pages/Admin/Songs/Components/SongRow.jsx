@@ -1,9 +1,7 @@
 import React from 'react';
 import moment from "moment";
-import { Table } from 'flowbite-react';
 import { useDispatch } from 'react-redux';
 import { openEditSongDialog } from 'Store/main/songsSlice';
-import { imageProxy } from "Store/features/proxy";
 
 function SongRow({ item }) {
   const dispatch = useDispatch();

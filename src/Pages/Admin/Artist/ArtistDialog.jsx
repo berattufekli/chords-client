@@ -6,7 +6,6 @@ import { closeNewArtistDialog } from 'Store/main/artistsSlice';
 import useForm from 'Hooks/useForm';
 import { addArtist } from 'Store/main/artistsSlice';
 import { updateArtist } from 'Store/main/artistsSlice';
-import { nanoid } from '@reduxjs/toolkit';
 
 const defaultFormState = {
   artistId: "",
@@ -18,7 +17,7 @@ const defaultFormState = {
 export default function ArtistDialog() {
   const dispatch = useDispatch();
 
-  const { form, handleChange, setForm, setInForm } = useForm(defaultFormState);
+  const { form, handleChange, setForm } = useForm(defaultFormState);
 
   const artistDialog = useSelector(
     ({ artists }) => artists.artistDialog

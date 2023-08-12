@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
-import { imageProxy } from "Store/features/proxy";
 
-String.prototype.turkishtoEnglish = function () {
-  return this.replace('Ğ', 'g')
+function turkishtoEnglish(input) {
+  return input
+    .replace('Ğ', 'g')
     .replace('Ü', 'u')
     .replace('Ş', 's')
     .replace('I', 'i')
@@ -16,7 +16,7 @@ String.prototype.turkishtoEnglish = function () {
     .replace('ı', 'i')
     .replace('ö', 'o')
     .replace('ç', 'c');
-};
+}
 
 function SongCollapse({ items, title, open }) {
 
@@ -46,7 +46,7 @@ function SongCollapse({ items, title, open }) {
             if (isOpen) {
               return (
                 <Link key={key} to={
-                  `/akor/${item.artistInfo[0].artistName.split(" ").join("-").toLowerCase().turkishtoEnglish()}/${item.songName.toLowerCase().turkishtoEnglish()}/${item._id}`}>
+                  `/akor/${turkishtoEnglish(item.artistInfo[0].artistName.split(" ").join("-").toLowerCase())}/${item.songName.toLowerCase().turkishtoEnglish()}/${item._id}`}>
                   <div className="group relative flex gap-x-6 rounded-lg p-4 items-center transition-all hover:bg-indigo-100">
                     <div className="flex overflow-hidden w-12 h-12 flex-none items-center justify-center rounded-lg">
                       <img
@@ -66,6 +66,8 @@ function SongCollapse({ items, title, open }) {
                 </Link>
               )
             }
+
+            return null;
           })}
 
           <div className={isOpen === true ? "pb-3" : "pb-0"}></div>

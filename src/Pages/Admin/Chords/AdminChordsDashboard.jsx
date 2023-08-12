@@ -5,7 +5,6 @@ import { getChords } from 'Store/main/chordsSlice';
 import ChordsDialog from './ChordsDialog';
 import ChordsTable from './ChordsTable';
 import { getSongs } from 'Store/main/songsSlice';
-import * as Transposer from 'chord-transposer';
 
 function AdminChordsDashboard() {
   const dispatch = useDispatch();

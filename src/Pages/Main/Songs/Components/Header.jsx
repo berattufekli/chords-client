@@ -24,7 +24,7 @@ function Header() {
 
   const { id } = useParams();
 
-  
+
 
   const song = useSelector((state) => selectSongById(state, id))
   return (
@@ -32,14 +32,16 @@ function Header() {
       <div className='flex items-center gap-2 font-bold text-gray-700 text-xl'>
         <img alt={song.artistInfo.artistName} src={song.artistInfo.url} className='w-20 h-20 rounded-md mr-2'>
         </img>
-        <Link to={
-          `/artist/${turkishtoEnglish(song.artistInfo.artistName.split(" ").join("-").toLowerCase())}/${song.artistInfo.artistId}`}>
-          <p className='transition-all hover:underline underline-offset-4 inline-block '>
-            {song.artistInfo.artistName}
-          </p>
-        </Link>
-        <p>-</p>
-        <p>{song.songName}</p>
+        <div className='flex items-center gap-2'>
+          <Link to={
+            `/artist/${turkishtoEnglish(song.artistInfo.artistName.split(" ").join("-").toLowerCase())}/${song.artistInfo.artistId}`}>
+            <p className='transition-all hover:underline underline-offset-4 inline-block '>
+              {song.artistInfo.artistName}
+            </p>
+          </Link>
+          <p>-</p>
+          <p>{song.songName}</p>
+        </div>
       </div>
 
 

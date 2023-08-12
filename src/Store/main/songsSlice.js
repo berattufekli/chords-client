@@ -3,35 +3,55 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from "@reduxjs/toolkit";
-import axiosConfig from "../features/axiosConfig";
 import { toastr } from "react-redux-toastr";
-import axios from "axios";
+import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
+import { collection, addDoc, updateDoc, deleteDoc, getDocs, doc, getDoc } from "firebase/firestore";
+import { uid } from 'uid';
 
-export const getSongs = createAsyncThunk(
-  "songs/getSongs",
-  async () => {
-    const response = await axiosConfig.get(`/api/songs`);
-    // const response = await axios.get(`${proxy}/api/songs`)
 
-    let { data } = await response.data;
-    return data;
-  }
-);
+export const getSongs = createAsyncThunk("songs/getSongs", async () => {
+  const songsCollection = collection(db, "songs");
+  const querySnapshot = await getDocs(songsCollection);
+
+  const songsData = [];
+  const promises = querySnapshot.docs.map(async (songDoc) => {
+    const songData = songDoc.data();
+    const artistId = songData.artistId;
+    console.log("artisid", artistId);
+    const artistDocRef = doc(db, "artists", artistId);
+    const artistDocSnap = await getDoc(artistDocRef);
+    const artistData = artistDocSnap.data();
+
+    // Şarkı ve sanatçı bilgilerini birleştirin
+    const songWithArtist = { ...songData, artistInfo: artistData };
+    songsData.push(songWithArtist);
+  });
+
+  console.log(songsData);
+
+  await Promise.all(promises);
+
+  return songsData;
+});
 
 export const addSong = createAsyncThunk(
   "songs/addSong",
   async (song, { dispatch, getState }) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/songs', song);
-
-      let { data } = await response.data;
-      if (response.data.success === true) {
-        toastr.success("Başarılı", "Kayıt Eklendi");
-        return data;
+      let songData = {
+        ...song,
+        songId: uid(16),
+        createdDate: Date.now(),
       }
+
+      console.log(songData);
+      const songsCollection = collection(db, "songs");
+      const docRef = await addDoc(songsCollection, songData);
+
+      toastr.success("Başarılı", "Şarkı Eklendi");
+      return { ...songData, success: true };
     } catch (error) {
       toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
-
       return null;
     }
   }
@@ -40,33 +60,36 @@ export const addSong = createAsyncThunk(
 export const updateSong = createAsyncThunk(
   "songs/updateSong",
   async (song, { dispatch, getState }) => {
-    const response = await axios.put(
-      `http://localhost:8080/api/songs/${song._id}`,
-      song);
+    try {
+      console.log(song);
+      const songRef = doc(db, "songs", song.id); // Belge referansı
+      await updateDoc(songRef, song);
 
-    const { data } = await response.data;
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Güncellendi");
-      return data;
+      toastr.success("Başarılı", "Şarkı Güncellendi");
+      return song;
+    } catch (error) {
+      console.log(error);
     }
-    return null;
   }
 );
 
 export const removeSong = createAsyncThunk(
   "songs/removeSong",
-  async (songId, { dispatch, getState }) => {
-    let response = await axiosConfig.delete(`/api/songs/${songId}`);
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Silindi");
-      return songId;
+  async (song, { dispatch, getState }) => {
+    try {
+      const songsCollection = collection(db, "songs");
+      await deleteDoc(songsCollection, song.id);
+
+      toastr.success("Başarılı", "Şarkı Silindi");
+      return song.id;
+    } catch (error) {
+      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
+      return null;
     }
-    return songId;
   }
 );
-
 const songsAdapter = createEntityAdapter({
-  selectId: (song) => song._id,
+  selectId: (song) => song.songId,
 });
 
 export const {

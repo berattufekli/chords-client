@@ -6,9 +6,10 @@ import { closeNewArtistDialog } from 'Store/main/artistsSlice';
 import useForm from 'Hooks/useForm';
 import { addArtist } from 'Store/main/artistsSlice';
 import { updateArtist } from 'Store/main/artistsSlice';
+import { nanoid } from '@reduxjs/toolkit';
 
 const defaultFormState = {
-  _id: '',
+  artistId: "",
   artistName: "",
   artistDescription: "",
   url: "",
@@ -70,7 +71,7 @@ export default function ArtistDialog() {
     if (artistDialog.type === "new") {
       let data = {
         ...form,
-        _id: null,
+        id: null,
         status: "active",
       };
       dispatch(addArtist(data));
@@ -123,9 +124,9 @@ export default function ArtistDialog() {
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
                           <input
                             type="text"
-                            name="_id"
-                            id="_id"
-                            value={form._id}
+                            name="artistId"
+                            id="artistId"
+                            value={form.artistId}
                             onChange={handleChange}
                             disabled
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"

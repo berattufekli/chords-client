@@ -1,7 +1,8 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp, getApp, getApps } from "firebase/app";
+import { getAuth } from "@firebase/auth";
+import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBlGSRZ_mDuS-tsQNicRn1Znj7D6h9X_GQ",
@@ -14,6 +15,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore();
-const storage = getStorage();
-export { app, db, storage };
+const auth = getAuth(app); // Firebase Authentication nesnesi
+const db = getFirestore(app); // Firebase Firestore nesnesi
+
+export { auth, db, firebaseConfig }; 

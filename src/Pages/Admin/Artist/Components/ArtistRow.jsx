@@ -14,7 +14,7 @@ function ArtistRow({ item }) {
   return (
     <tr>
       <td>
-        <p className='font-bold'>{item._id}</p>
+        <p className='font-bold'>{item.artistId}</p>
       </td>
       <td>
         <div className='flex items-center'>
@@ -36,7 +36,7 @@ function ArtistRow({ item }) {
       </td>
       <td>
         <div className="flex items-center">
-          <p className='font-bold'>{moment(item.createdDate).format("DD-MM-YYYY")}</p>
+          <p className='font-bold'>{moment(item.createdDate.seconds).format("DD-MM-YYYY")}</p>
         </div>
       </td>
       <td>

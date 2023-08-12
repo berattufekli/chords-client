@@ -5,22 +5,64 @@ import {
 import { toastr } from "react-redux-toastr";
 import axios from "axios";
 import setAuthToken from "Store/features/setAuthToken";
+import { db } from "lib/firebase";
+import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import CryptoJS from "crypto-js";
+import { auth } from "lib/firebase";
+import { createUserWithEmailAndPassword, signInWithCustomToken, signInWithEmailAndPassword } from "@firebase/auth";
+
+
+const encryptPassword = (text, secretKey) => {
+  const encrypted = CryptoJS.AES.encrypt(text, secretKey).toString();
+  return encrypted;
+};
+
+const decryptPassword = (encryptedText, secretKey) => {
+  const bytes = CryptoJS.AES.decrypt(encryptedText, secretKey);
+  const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+  return decrypted;
+};
+
+const checkEmailExists = async (email) => {
+  const usersCollection = collection(db, "users");
+  const q = query(usersCollection, where("email", "==", email));
+  const querySnapshot = await getDocs(q);
+
+  return !querySnapshot.empty;
+};
 
 export const register = createAsyncThunk(
   "auth/register",
   async (user, { dispatch, getState }) => {
     try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        user.email,
+        user.password
+      );
+      const firebaseUser = userCredential.user;
 
-      const response = await axios.post('http://localhost:8080/api/auth/register', user);
 
-      console.log(response);
+      const userData = {
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+        userType: "student",
+        createDate: new Date().getTime(),
+        userId: firebaseUser.uid,
+      };
 
-      let data = await response.data;
-      return data;
+      // "users" koleksiyonuna veri eklemek
+      const docRef = await addDoc(collection(db, "userData"), userData);
+
+      return ({
+        ...userData,
+        success: true,
+        userAuth: "student",
+        isAuthenticated: true,
+      });
     } catch (error) {
-      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
-
-      return null;
+      console.log(error);
     }
   }
 );
@@ -29,20 +71,36 @@ export const login = createAsyncThunk(
   "auth/login",
   async (user, { dispatch, getState }) => {
     try {
-      
-      const response = await axios.post('http://localhost:8080/api/auth/login', user);
-      
-      let data = await response.data;
-      
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        user.email,
+        user.password
+      );
+      const firebaseUser = userCredential.user;
 
-      if (response.data.success) {
-        if(data){
-          localStorage.setItem("token", data.access_token);
-          return data;
-        }
-      }
+      console.log(firebaseUser);
+
+      // Kullanıcının Firestore'dan verilerini alın
+      const usersCollection = collection(db, "userData");
+      const q = query(usersCollection, where("userId", "==", firebaseUser.uid));
+      const querySnapshot = await getDocs(q);
+
+      let userData = {};
+      querySnapshot.forEach((doc) => {
+        userData = doc.data();
+      });
+
+      const token = await firebaseUser.getIdToken();
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", firebaseUser.uid);
+
+      return ({
+        ...userData,
+        success: true,
+        userAuth: userData.userType,
+      });
     } catch (error) {
-      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
+      console.log(error);
     }
   }
 );
@@ -62,7 +120,7 @@ export const updateUserInformation = createAsyncThunk(
         return { ...data, succes: true };
       }
     } catch (error) {
-      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
+      console.log(error);
     }
   }
 );
@@ -70,26 +128,30 @@ export const updateUserInformation = createAsyncThunk(
 export const loadUser = createAsyncThunk(
   "auth/loadUser", async () => {
     try {
-      if (localStorage.token) {
-        setAuthToken(localStorage.token);
-      }
-      const response = await axios.post(`http://localhost:8080/api/auth/load-user`, {
-        token: localStorage.token,
-      });
-      const data = response.data;
-      console.log("success", response.data.success);
-      if (response.data.success) {
-        if (data) {
-          return data;
-        }
-      } else {
-        toastr.error(
-          "Üyelik Bitti",
-          "Lütfen satış danışmanınızla iletişime geçiniz"
-        );
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        
+        
+        const usersCollection = collection(db, "userData");
+        const q = query(usersCollection, where("userId", "==", userId));
+        const querySnapshot = await getDocs(q);
+        console.log(querySnapshot);
+
+        let userData = {};
+        querySnapshot.forEach((doc) => {
+          userData = doc.data();
+        });
+
+        console.log(userData);
+
+        return ({
+          ...userData,
+          success: true,
+          userAuth: userData.userType,
+        });
       }
     } catch (error) {
-      toastr.error("Oturum Sonlandı", "Tekrar giriş yapınız");
+      console.log(error);
     }
   }
 );

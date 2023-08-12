@@ -19,6 +19,10 @@ function App() {
   const dispatch = useDispatch();
   const { userAuth, isAuthenticated } = useSelector((state) => state.auth);
 
+  const auth = useSelector((state) => state.auth);
+
+  console.log(auth);
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -54,9 +58,9 @@ function App() {
     }
     );
 
-  // if (loading) {
-  //   return <Loading />
-  // }
+  if (loading) {
+    return <Loading />
+  }
 
   if (isAuthenticated === false) {
     return (
@@ -64,7 +68,7 @@ function App() {
         <ToastContainer />
         <Routes>
           {getRoutes(NotAuthenticatedRoutes)}
-        
+
           {/* <Route path="*" element={<Navigate to="/dashboards/analytics" />} /> */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

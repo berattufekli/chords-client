@@ -3,18 +3,23 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from "@reduxjs/toolkit";
-import axiosConfig from "../features/axiosConfig";
 import { toastr } from "react-redux-toastr";
-import axios from "axios";
+import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
+import { collection, addDoc, updateDoc, deleteDoc, getDocs, doc } from "firebase/firestore";
+import { uid } from 'uid';
 
 export const getArtists = createAsyncThunk(
   "artists/getArtists",
   async () => {
-    const response = await axiosConfig.get(`/api/artists`);
-    // const response = await axios.get(`${proxy}/api/artists`)
-    console.log(response.data);
-    let { data } = await response.data;
-    return data;
+    const artistsCollection = collection(db, "artists");
+    const querySnapshot = await getDocs(artistsCollection);
+
+    const artistsData = [];
+    querySnapshot.forEach((doc) => {
+      artistsData.push({ ...doc.data() });
+    });
+
+    return artistsData;
   }
 );
 
@@ -22,17 +27,18 @@ export const addArtist = createAsyncThunk(
   "artists/addArtist",
   async (artist, { dispatch, getState }) => {
     try {
-
-      const response = await axios.post('http://localhost:8080/api/artists', artist);
-
-      let { data } = await response.data;
-      if (response.data.success === true) {
-        toastr.success("Başarılı", "Kayıt Eklendi");
-        return data;
+      let artistData = {
+        ...artist,
+        artistId: uid(16),
+        createdDate: Date.now(),
       }
+      const artistsCollection = collection(db, "artists");
+      const docRef = await addDoc(artistsCollection, artistData);
+
+      toastr.success("Başarılı", "Kayıt Eklendi");
+      return { ...artistData, success: true };
     } catch (error) {
       toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
-
       return null;
     }
   }
@@ -41,36 +47,36 @@ export const addArtist = createAsyncThunk(
 export const updateArtist = createAsyncThunk(
   "artists/updateArtist",
   async (artist, { dispatch, getState }) => {
+    try {
+      const artistRef = doc(db, "artists", artist.artistId); // Belge referansı
+      await updateDoc(artistRef, artist);
 
-    const response = await axios.put(
-      `http://localhost:8080/api/artists/${artist._id}`,
-      artist);
-
-    const { data } = await response.data;
-    if (response.data.success === true) {
       toastr.success("Başarılı", "Kayıt Güncellendi");
-      return data;
+      return artist;
+    } catch (error) {
+      console.log(error);
     }
-    return null;
   }
 );
 
 export const removeArtist = createAsyncThunk(
   "artists/removeArtist",
   async (artist, { dispatch, getState }) => {
+    try {
+      const artistsCollection = collection(db, "artists");
+      await deleteDoc(artistsCollection, artist.id);
 
-    const response = await axios.delete(
-      `http://localhost:8080/api/artists/${artist._id}`);
-    if (response.data.success === true) {
       toastr.success("Başarılı", "Kayıt Silindi");
-      return artist._id;
+      return artist.id;
+    } catch (error) {
+      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
+      return null;
     }
-    return null;
   }
 );
 
 const artistsAdapter = createEntityAdapter({
-  selectId: (artist) => artist._id,
+  selectId: (artist) => artist.artistId,
 });
 
 export const {

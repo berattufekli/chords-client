@@ -11,7 +11,7 @@ import { selectArtists } from 'Store/main/artistsSlice';
 
 
 const defaultFormState = {
-  _id: "",
+  songId: "",
   songName: "",
   songAlbum: "",
   lyrics: "",
@@ -82,9 +82,9 @@ export default function SongDialog() {
     if (songDialog.type === "new") {
       let data = {
         ...form,
-        _id: null,
+        songId: null,
         status: "active",
-        artistId: artistValue._id,
+        artistId: artistValue.artistId,
         lyrics: form.lyrics.split("\n"),
       };
       setArtistValue(false);
@@ -96,7 +96,7 @@ export default function SongDialog() {
       let data = {
         ...form,
         status: "active",
-        artistId: artistValue._id,
+        artistId: artistValue.artistId,
         lyrics: form.lyrics.split("\n"),
       };
       setArtistValue(false);

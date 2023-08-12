@@ -8,7 +8,7 @@ import { imageProxy } from "Store/features/proxy";
 function SongRow({ item }) {
   const dispatch = useDispatch();
 
-  console.log(item.lyrics);
+  console.log(item);
 
   const editData = React.useCallback(() => {
     

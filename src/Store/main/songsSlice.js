@@ -46,7 +46,7 @@ export const addSong = createAsyncThunk(
 
       console.log(songData);
       const songsCollection = collection(db, "songs");
-      const docRef = await addDoc(songsCollection, songData);
+      await addDoc(songsCollection, songData);
 
       toastr.success("Başarılı", "Şarkı Eklendi");
       return { ...songData, success: true };

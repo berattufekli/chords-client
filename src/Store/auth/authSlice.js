@@ -2,34 +2,13 @@ import {
   createSlice,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import { toastr } from "react-redux-toastr";
 import axios from "axios";
-import setAuthToken from "Store/features/setAuthToken";
 import { db } from "lib/firebase";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
-import CryptoJS from "crypto-js";
 import { auth } from "lib/firebase";
-import { createUserWithEmailAndPassword, signInWithCustomToken, signInWithEmailAndPassword } from "@firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth";
 
 
-const encryptPassword = (text, secretKey) => {
-  const encrypted = CryptoJS.AES.encrypt(text, secretKey).toString();
-  return encrypted;
-};
-
-const decryptPassword = (encryptedText, secretKey) => {
-  const bytes = CryptoJS.AES.decrypt(encryptedText, secretKey);
-  const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-  return decrypted;
-};
-
-const checkEmailExists = async (email) => {
-  const usersCollection = collection(db, "users");
-  const q = query(usersCollection, where("email", "==", email));
-  const querySnapshot = await getDocs(q);
-
-  return !querySnapshot.empty;
-};
 
 export const register = createAsyncThunk(
   "auth/register",
@@ -53,7 +32,7 @@ export const register = createAsyncThunk(
       };
 
       // "users" koleksiyonuna veri eklemek
-      const docRef = await addDoc(collection(db, "userData"), userData);
+      await addDoc(collection(db, "userData"), userData);
 
       return ({
         ...userData,

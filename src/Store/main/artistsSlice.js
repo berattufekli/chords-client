@@ -33,7 +33,7 @@ export const addArtist = createAsyncThunk(
         createdDate: Date.now(),
       }
       const artistsCollection = collection(db, "artists");
-      const docRef = await addDoc(artistsCollection, artistData);
+      await addDoc(artistsCollection, artistData);
 
       toastr.success("Başarılı", "Kayıt Eklendi");
       return { ...artistData, success: true };

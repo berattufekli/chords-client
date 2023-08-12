@@ -14,7 +14,7 @@ function RepertuarDashboard() {
 
   useEffect(() => {
     dispatch(getListById(id)).then(() => setLoading(false));
-  }, [dispatch])
+  }, [dispatch, id])
 
   if(loading){
     return <Loading />

@@ -1,6 +1,5 @@
 import { AtSymbolIcon, UserIcon } from '@heroicons/react/24/outline'
 import useForm from 'Hooks/useForm'
-import { loadUser } from 'Store/auth/authSlice'
 import { updateUserInformation } from 'Store/auth/authSlice'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'

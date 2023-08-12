@@ -1,12 +1,9 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Table } from 'flowbite-react';
+import { useSelector } from 'react-redux';
 import SongChordsRow from './Components/SongChordRow';
 import { selectSongs } from 'Store/main/songsSlice';
 
 function SongChordsTable() {
-  const dispatch = useDispatch();
-
   const songs = useSelector(selectSongs);
 
   console.log(songs);

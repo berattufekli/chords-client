@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { getArtists } from 'Store/main/artistsSlice';
 import Loading from 'Components/Loading/Loading';
 import SongChordsTable from './SongChordsTable';
 import SongChordsDialog from './SongChordsDialog';

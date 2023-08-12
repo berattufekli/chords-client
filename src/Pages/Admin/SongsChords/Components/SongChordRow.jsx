@@ -1,12 +1,12 @@
 import React from 'react';
 import moment from "moment";
-import { Table } from 'flowbite-react';
 import { useDispatch } from 'react-redux';
 import { openEditSongChordDialog } from 'Store/main/songChordsSlice';
 import { Link } from 'react-router-dom';
 
-String.prototype.turkishtoEnglish = function () {
-  return this.replace('Ğ', 'g')
+function turkishtoEnglish(input) {
+  return input
+    .replace('Ğ', 'g')
     .replace('Ü', 'u')
     .replace('Ş', 's')
     .replace('I', 'i')
@@ -19,7 +19,7 @@ String.prototype.turkishtoEnglish = function () {
     .replace('ı', 'i')
     .replace('ö', 'o')
     .replace('ç', 'c');
-};
+}
 
 function SongChordsRow({ item }) {
   const dispatch = useDispatch();
@@ -70,7 +70,7 @@ function SongChordsRow({ item }) {
       <td>
         <Link
           to={
-            `/akor/${item.artistInfo[0].artistName.split(" ").join("-").toLowerCase().turkishtoEnglish()}/${item.songName.toLowerCase().turkishtoEnglish()}/${item._id}`}>
+            `/akor/${turkishtoEnglish(item.artistInfo[0].artistName.split(" ").join("-").toLowerCase())}/${turkishtoEnglish(item.songName.toLowerCase())}/${item._id}`}>
           <button
             className="rounded-md bg-indigo-600 px-5 transition-all py-2 text-sm font-bold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >

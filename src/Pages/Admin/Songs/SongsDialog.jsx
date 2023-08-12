@@ -41,7 +41,6 @@ export default function SongDialog() {
       const artist = artists.find(
         (f) => f.artistId === songDialog.data.artistInfo.artistId
       );
-      console.log(artist);
       setArtistValue(artist);
     }
 
@@ -55,7 +54,7 @@ export default function SongDialog() {
       });
 
     }
-  }, [songDialog.data, songDialog.type, setForm]);
+  }, [songDialog.data, songDialog.type, setForm, artists]);
 
 
   useEffect(() => {

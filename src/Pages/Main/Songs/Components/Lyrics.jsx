@@ -20,7 +20,7 @@ function Lyrics({ tone, setTone }) {
 
   useEffect(() => {
     const lines = song.lyrics.map((lyrics, key) => {
-      return { 
+      return {
         line: key, // Sıra numarasını eklemek için "key + 1" kullanılır
         lyrics
       };
@@ -32,12 +32,12 @@ function Lyrics({ tone, setTone }) {
 
     const tone = ToneValues.find((f) => f.key === song.originalTone);
     setTone(tone);
-    
+
   }, [song, setTone, dispatch])
 
   useEffect(() => {
     dispatch(setDefault());
-  }, [id])
+  }, [id, dispatch])
 
 
   if (!lyrics && !chords) {

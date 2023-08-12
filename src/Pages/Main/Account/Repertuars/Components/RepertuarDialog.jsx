@@ -53,7 +53,7 @@ function NewList() {
           try {
             if (params.payload.success) {
 
-              console.log("burada",params.payload);
+              console.log("burada", params.payload);
               toast.success('Liste Güncellendi👌', {
                 position: 'bottom-center',
                 autoClose: 3000, // 3 saniye sonra otomatik olarak kapanacak
@@ -95,7 +95,7 @@ function NewList() {
         name: "Gizli",
       });
     }
-  }, [listDialog]);
+  }, [listDialog, setForm]);
 
   const handleCloseDialog = () => {
     dispatch(closeEditListDialog());

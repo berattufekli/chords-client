@@ -25,7 +25,7 @@ function RepertuarList() {
     else {
       setLoading(false);
     }
-  }, [dispatch])
+  }, [dispatch, isAuthenticated, userId])
 
 
   

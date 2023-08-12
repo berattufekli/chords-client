@@ -1,5 +1,4 @@
 import { GlobeEuropeAfricaIcon, LockClosedIcon } from '@heroicons/react/24/outline'
-import { setSettings } from 'Store/main/applicationSlice';
 import { getListByUser } from 'Store/main/listsSlice';
 import { removeRepertuarSong } from 'Store/main/repertuarSongsSlice';
 import { addRepertuarSong } from 'Store/main/repertuarSongsSlice';
@@ -29,7 +28,7 @@ function RepertuarListItem({ item }) {
     }
 
     console.log(song);
-  }, [id, isInclude])
+  }, [id, isInclude, item.songs])
 
 
   const handleSubmit = () => {

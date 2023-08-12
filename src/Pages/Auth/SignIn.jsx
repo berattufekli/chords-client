@@ -88,11 +88,11 @@ export default function SingIn() {
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                   Şifre
                 </label>
-                <div className="text-sm">
+                {/* <div className="text-sm">
                   <a href='#' className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Şifrenizi mi unuttunuz?
                   </a>
-                </div>
+                </div> */}
               </div>
               <div className="mt-2 flex items-center">
                 <LockClosedIcon className="h-4 w-4 absolute text-gray-400 ml-2" aria-hidden="true" />

@@ -21,8 +21,6 @@ function App() {
 
   const auth = useSelector((state) => state.auth);
 
-  console.log(auth);
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

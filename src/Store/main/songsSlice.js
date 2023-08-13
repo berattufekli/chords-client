@@ -23,10 +23,10 @@ export const getSongs = createAsyncThunk("songs/getSongs", async () => {
     const artistDocRef = doc(db, "artists", artistId);
     const artistDocSnap = await getDoc(artistDocRef);
     const artistData = artistDocSnap.data();
+  
 
     //chords data getirme
     const chordsInfo = [];
-    
     const chordsCollectionRef = collection(db, 'chords');
     const chordsQuery = query(chordsCollectionRef, where('songId', '==', songId));
     const chordsQuerySnapshot = await getDocs(chordsQuery);
@@ -44,7 +44,13 @@ export const getSongs = createAsyncThunk("songs/getSongs", async () => {
     });
 
     //şarkı bilgilerini birleştir
-    const songWithArtist = { ...songData, artistInfo: artistData, artistId: artistId, chordsInfo, chordsData };
+    const songWithArtist = {
+      ...songData,
+      artistInfo: artistData,
+      artistId: artistId,
+      chordsInfo,
+      chordsData,
+    };
     songsData.push(songWithArtist);
   });
 

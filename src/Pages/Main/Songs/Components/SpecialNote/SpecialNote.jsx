@@ -3,16 +3,19 @@ import { updateSongNote } from 'Store/main/songNotesSlice';
 import { removeSongNote } from 'Store/main/songNotesSlice';
 import { addSongNote } from 'Store/main/songNotesSlice';
 import { getSongs } from 'Store/main/songsSlice';
-import { selectSongById } from 'Store/main/songsSlice';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import MustLogin from '../MustLogin';
+import { selectListById } from 'Store/main/listsSlice';
+import { selectSongNotesById } from 'Store/main/songNotesSlice';
+import { selectSongNotes } from 'Store/main/songNotesSlice';
+import { getSongNoteSongAndUserId } from 'Store/main/songNotesSlice';
 
 const defaultFormState = {
-  _id: "",
+  songNoteId: "",
   note: "",
 }
 
@@ -22,13 +25,15 @@ function SpecialNote() {
 
 
   const { settings } = useSelector((state) => state.applicationSlice);
-  const { songNote } = useSelector((state) => selectSongById(state, id));
+  const songNote = useSelector(selectSongNotes);
+
+
   const { userId, isAuthenticated } = useSelector((state) => state.auth);
 
   const { form, handleChange, setForm } = useForm(defaultFormState);
 
   useEffect(() => {
-    if (songNote !== undefined && songNote[0]) {
+    if (songNote.length > 0) {
       setForm(songNote[0]);
     }
     else {
@@ -47,7 +52,7 @@ function SpecialNote() {
       dispatch(addSongNote(data))
         .then((params) => {
           if (params.payload.success) {
-            dispatch(getSongs());
+            dispatch(getSongNoteSongAndUserId({ songId: id, userId }));
             toast.success('Özel Not Oluşturuldu👌', {
               position: 'bottom-center',
               autoClose: 3000, // 3 saniye sonra otomatik olarak kapanacak
@@ -68,7 +73,7 @@ function SpecialNote() {
       dispatch(updateSongNote(data))
         .then((params) => {
           if (params.payload.success) {
-            dispatch(getSongs());
+            dispatch(getSongNoteSongAndUserId({ songId: id, userId }));
             toast.success('Özel Not Güncellendi', {
               position: 'bottom-center',
               autoClose: 3000, // 3 saniye sonra otomatik olarak kapanacak
@@ -84,10 +89,11 @@ function SpecialNote() {
 
   const handleRemoveNote = () => {
     if (songNote.length === 1) {
-      dispatch(removeSongNote(form))
+      console.log(form.songNoteId);
+      dispatch(removeSongNote(form.songNoteId))
         .then((params) => {
           if (params.payload.success) {
-            dispatch(getSongs());
+            dispatch(getSongNoteSongAndUserId({ songId: id, userId }));
             toast.success('Özel Not Silindi', {
               position: 'bottom-center',
               autoClose: 3000, // 3 saniye sonra otomatik olarak kapanacak
@@ -103,7 +109,7 @@ function SpecialNote() {
 
   if (settings.showSpecialNote) {
     if (!isAuthenticated) {
-      return <MustLogin title={"Özel not"}/>
+      return <MustLogin title={"Özel not"} />
     }
 
     return (
@@ -125,7 +131,7 @@ function SpecialNote() {
 
         <div className='grid sm:grid-cols-8 grid-cols-2 gap-2'>
           {
-            songNote.length === 1 && <button onClick={handleRemoveNote} className="rounded-md  my-2 px-3 h-8 bg-red-600 transition-all  text-sm font-bold text-white shadow-sm hover:bg-red-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            songNote !== undefined && <button onClick={handleRemoveNote} className="rounded-md  my-2 px-3 h-8 bg-red-600 transition-all  text-sm font-bold text-white shadow-sm hover:bg-red-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
               Sil
             </button>
           }

@@ -2,7 +2,7 @@
 import Loading from 'Components/Loading/Loading';
 import { getSongs } from 'Store/main/songsSlice';
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from './Components/Header';
 import Lyrics from './Components/Lyrics';
 import Tones from './Components/Tones';
@@ -11,11 +11,14 @@ import { useParams } from 'react-router-dom';
 import NotFound from '../404/NotFound';
 import SpecialNote from './Components/SpecialNote/SpecialNote';
 import RepertuarList from './Components/Repertuar/RepertuarList';
+import { getSongNoteSongAndUserId } from 'Store/main/songNotesSlice';
 
 function SongsDashboard() {
   const { id } = useParams();
+  const { userId } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [noteLoading, setNoteLoading] = useState(true);
   const [tone, setTone] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
@@ -32,13 +35,16 @@ function SongsDashboard() {
         }
       })
       .then(() => setLoading(false)).then();
+
+    dispatch(getSongNoteSongAndUserId({ songId: id, userId }))
+      .then(() => setNoteLoading(false));
   }, [dispatch, id]);
 
   if (notFound) {
     return <NotFound />
   }
 
-  if (loading) {
+  if (loading || noteLoading) {
     return <Loading />
   }
 

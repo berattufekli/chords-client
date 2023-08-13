@@ -75,6 +75,7 @@ export const login = createAsyncThunk(
         ...userData,
         success: true,
         userAuth: userData.userType,
+        isAuthenticated: true,
       });
     } catch (error) {
       console.log(error);
@@ -112,19 +113,17 @@ export const loadUser = createAsyncThunk(
         const usersCollection = collection(db, "userData");
         const q = query(usersCollection, where("userId", "==", userId));
         const querySnapshot = await getDocs(q);
-        console.log(querySnapshot);
 
         let userData = {};
         querySnapshot.forEach((doc) => {
           userData = doc.data();
         });
 
-        console.log(userData);
-
         return ({
           ...userData,
           success: true,
           userAuth: userData.userType,
+          isAuthenticated: true,
         });
       }
     } catch (error) {

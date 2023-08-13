@@ -3,18 +3,41 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from "@reduxjs/toolkit";
-import axiosConfig from "../features/axiosConfig";
 import { toastr } from "react-redux-toastr";
-import axios from "axios";
+import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
+import { collection, updateDoc, deleteDoc, getDocs, doc, setDoc } from "firebase/firestore";
+import { uid } from 'uid';
 
 export const getSongNotes = createAsyncThunk(
   "songNotes/getSongNotes",
   async () => {
-    const response = await axiosConfig.get(`/api/artists`);
-    // const response = await axios.get(`${proxy}/api/artists`)
-    console.log(response.data);
-    let { data } = await response.data;
-    return data;
+    const songNotesCollection = collection(db, "songNotes");
+    const querySnapshot = await getDocs(songNotesCollection);
+
+    const songNotesData = [];
+    querySnapshot.forEach((doc) => {
+      songNotesData.push({ ...doc.data() });
+    });
+
+    return songNotesData;
+  }
+);
+
+export const getSongNoteSongAndUserId = createAsyncThunk(
+  "songNotes/getSongNoteSongAndUserId",
+  async ({ songId, userId }) => {
+    const songNotesCollection = collection(db, "songNotes");
+    const querySnapshot = await getDocs(songNotesCollection);
+
+    const songNotesData = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      if (data.songId === songId && data.userId === userId) {
+        songNotesData.push({ ...data });
+      }
+    });
+
+    return songNotesData;
   }
 );
 
@@ -22,19 +45,18 @@ export const addSongNote = createAsyncThunk(
   "songNotes/addSongNote",
   async (songNote, { dispatch, getState }) => {
     try {
+      let songNoteData = {
+        ...songNote,
+        songNoteId: uid(24),
+        createdDate: Date.now(),
+      };
+      const songNoteDocRef = doc(db, "songNotes", songNoteData.songNoteId);
+      await setDoc(songNoteDocRef, songNoteData);
 
-      console.log(songNote);
-      const response = await axios.post('http://localhost:8080/api/song-notes', songNote);
-
-      const { data } = await response.data;
-      if (response.data.success === true) {
-        toastr.success("Başarılı", "Kayıt Güncellendi");
-
-        return { ...data, success: true };
-      }
+      toastr.success("Başarılı", "Not Eklendi");
+      return { ...songNoteData, success: true };
     } catch (error) {
       toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
-
       return null;
     }
   }
@@ -43,38 +65,38 @@ export const addSongNote = createAsyncThunk(
 export const updateSongNote = createAsyncThunk(
   "songNotes/updateSongNote",
   async (songNote, { dispatch, getState }) => {
+    try {
+      const songNoteRef = doc(db, "songNotes", songNote.songNoteId); // Belge referansı
+      await updateDoc(songNoteRef, songNote);
 
-    const response = await axios.put(
-      `http://localhost:8080/api/song-notes/${songNote._id}`,
-      songNote);
-
-    const { data } = await response.data;
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Güncellendi");
-
-      return { ...data, success: true };
+      toastr.success("Başarılı", "Not Güncellendi");
+      return { songNote, success: true };
+    } catch (error) {
+      console.log(error);
     }
-    return null;
   }
 );
 
 export const removeSongNote = createAsyncThunk(
   "songNotes/removeSongNote",
-  async (songNote, { dispatch, getState }) => {
+  async (songNoteId, { dispatch, getState }) => {
+    try {
+      console.log(songNoteId);
+      const songNoteRef = doc(db, "songNotes", songNoteId);  // Doğru belge referansını oluşturun
 
-    const response = await axios.delete(`http://localhost:8080/api/song-notes/${songNote._id}`);
+      await deleteDoc(songNoteRef);  // Belge referansını kullanarak belgeyi silin
 
-    const { data } = response.data;
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Silindi");
-      return { ...data, success: true };
+      toastr.success("Başarılı", "Not Silindi");
+      return { songNoteId, success: true };
+    } catch (error) {
+      console.log(error);
+      return null;
     }
-    return null;
   }
 );
 
 const songNotesAdapter = createEntityAdapter({
-  selectId: (songNote) => songNote._id,
+  selectId: (songNote) => songNote.songNoteId,
 });
 
 export const {
@@ -145,6 +167,7 @@ const artistsSlice = createSlice({
     [removeSongNote.fulfilled]: (state, action) =>
       songNotesAdapter.removeOne(state, action.payload),
     [getSongNotes.fulfilled]: songNotesAdapter.setAll,
+    [getSongNoteSongAndUserId.fulfilled]: songNotesAdapter.setAll,
   },
 });
 

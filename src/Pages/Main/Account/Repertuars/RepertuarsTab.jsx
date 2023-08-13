@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Repertuars from './Components/Repertuars'
 import { useDispatch, useSelector } from 'react-redux'
-import { getListByUser } from 'Store/main/listsSlice';
 import Loading from 'Components/Loading/Loading';
+import { getListByUser } from 'Store/main/listsSlice';
 
 function RepertuarsTab() {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.auth);
-
+  console.log(userId);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

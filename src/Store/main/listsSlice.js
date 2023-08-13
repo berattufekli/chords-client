@@ -4,38 +4,22 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { toastr } from "react-redux-toastr";
-import axios from "axios";
+import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
+import { collection, updateDoc, deleteDoc, getDocs, doc, setDoc, where, getDoc, query } from "firebase/firestore";
+import { uid } from 'uid';
 
 export const getLists = createAsyncThunk(
   "lists/getLists",
   async () => {
-    const response = await axios.get('http://localhost:8080/api/lists');
-    // const response = await axios.get(`${proxy}/api/songs`)
+    const listsCollection = collection(db, "lists");
+    const querySnapshot = await getDocs(listsCollection);
 
-    let { data } = await response.data;
-    return data;
-  }
-);
+    const listsData = [];
+    querySnapshot.forEach((doc) => {
+      listsData.push({ ...doc.data() });
+    });
 
-export const getListById = createAsyncThunk(
-  "lists/getListById",
-  async (listId) => {
-    const response = await axios.get(`http://localhost:8080/api/lists/${listId}`);
-    // const response = await axios.get(`${proxy}/api/songs`)
-
-    let { data } = await response.data;
-    return data;
-  }
-);
-
-export const getListByUser = createAsyncThunk(
-  "lists/getListByUser",
-  async (userId) => {
-    const response = await axios.get(`http://localhost:8080/api/lists/user/${userId}`);
-    // const response = await axios.get(`${proxy}/api/songs`)
-    console.log(response);
-    let { data } = await response.data;
-    return data;
+    return listsData;
   }
 );
 
@@ -43,16 +27,18 @@ export const addList = createAsyncThunk(
   "lists/addList",
   async (list, { dispatch, getState }) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/lists', list);
+      let listData = {
+        ...list,
+        listId: uid(24),
+        createdDate: Date.now(),
+      };
+      const listDocRef = doc(db, "lists", listData.listId);
+      await setDoc(listDocRef, listData);
 
-      let { data } = await response.data;
-      if (response.data.success === true) {
-        toastr.success("Başarılı", "Kayıt Eklendi");
-        return data;
-      }
+      toastr.success("Başarılı", "Liste Eklendi");
+      return { ...listData, success: true };
     } catch (error) {
       toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
-
       return null;
     }
   }
@@ -61,33 +47,70 @@ export const addList = createAsyncThunk(
 export const updateList = createAsyncThunk(
   "lists/updateList",
   async (list, { dispatch, getState }) => {
-    const response = await axios.put(
-      `http://localhost:8080/api/lists/${list._id}`,
-      list);
+    try {
+      const listRef = doc(db, "lists", list.listId); // Belge referansı
+      await updateDoc(listRef, list);
 
-    const { data } = await response.data;
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Güncellendi");
-      return { ...data, success: true };
+      toastr.success("Başarılı", "Liste Güncellendi");
+      return list;
+    } catch (error) {
+      console.log(error);
     }
-    return { ...data, success: false };;
   }
 );
 
 export const removeList = createAsyncThunk(
   "lists/removeList",
-  async (listId, { dispatch, getState }) => {
-    const response = await axios.delete(`http://localhost:8080/api/lists/${listId}`);
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Silindi");
-      return listId;
+  async (list, { dispatch, getState }) => {
+    try {
+      const listsCollection = collection(db, "lists");
+      await deleteDoc(listsCollection, list.listId);
+
+      toastr.success("Başarılı", "Liste Silindi");
+      return list.listId;
+    } catch (error) {
+      toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
+      return null;
     }
-    return listId;
   }
 );
 
+export const getListByUser = createAsyncThunk(
+  "lists/getListByUser",
+  async (userId) => {
+    const listsCollection = collection(db, "lists");
+    const q = query(listsCollection, where("userId", "==", userId));
+
+    const querySnapshot = await getDocs(q);
+
+    const listsData = [];
+    querySnapshot.forEach((doc) => {
+      listsData.push({ ...doc.data() });
+    });
+
+    return listsData;
+  }
+);
+
+export const getListById = createAsyncThunk(
+  "lists/getListById",
+  async (listId) => {
+    const listDocRef = doc(db, "lists", listId);
+    const listDocSnap = await getDoc(listDocRef);
+
+    if (listDocSnap.exists()) {
+      const listData = listDocSnap.data();
+      return { ...listData };
+    } else {
+      return null; // Eğer belirli listId'ye sahip kayıt bulunamazsa null dönebilirsiniz.
+    }
+  }
+);
+
+
+
 const listsAdapter = createEntityAdapter({
-  selectId: (list) => list._id,
+  selectId: (list) => list.listId,
 });
 
 export const {

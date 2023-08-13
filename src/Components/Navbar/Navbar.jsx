@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 export default function Navbar() {
 
   const { isAuthenticated } = useSelector((state) => state.auth);
-  console.log(isAuthenticated)
+  console.log("isss", isAuthenticated)
 
   return (
     <div as={"nav"} className='bg-indigo-700'>

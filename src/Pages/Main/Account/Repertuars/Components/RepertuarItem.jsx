@@ -26,7 +26,7 @@ function ListItem({ item }) {
             <LockClosedIcon className="h-5 w-5 flex-shrink-0 rounded-full mr-2" />
         }
 
-        <Link to={`/repertuar/${item._id}`} className='text-gray-700 font-semibold'>{item.listName}</Link>
+        <Link to={`/repertuar/${item.listId}`} className='text-gray-700 font-semibold'>{item.listName}</Link>
       </div>
 
       <div className='flex gap-2'>

@@ -2,15 +2,11 @@ import useForm from 'Hooks/useForm';
 import { updateSongNote } from 'Store/main/songNotesSlice';
 import { removeSongNote } from 'Store/main/songNotesSlice';
 import { addSongNote } from 'Store/main/songNotesSlice';
-import { getSongs } from 'Store/main/songsSlice';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
 import MustLogin from '../MustLogin';
-import { selectListById } from 'Store/main/listsSlice';
-import { selectSongNotesById } from 'Store/main/songNotesSlice';
 import { selectSongNotes } from 'Store/main/songNotesSlice';
 import { getSongNoteSongAndUserId } from 'Store/main/songNotesSlice';
 

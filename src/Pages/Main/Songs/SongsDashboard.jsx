@@ -38,7 +38,7 @@ function SongsDashboard() {
 
     dispatch(getSongNoteSongAndUserId({ songId: id, userId }))
       .then(() => setNoteLoading(false));
-  }, [dispatch, id]);
+  }, [dispatch, id, userId]);
 
   if (notFound) {
     return <NotFound />

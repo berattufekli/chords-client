@@ -34,7 +34,7 @@ function RepertuarListItem({ item }) {
   const handleSubmit = () => {
     if (!isInclude) {
       let data = {
-        listId: item._id,
+        listId: item.listId,
         songId: id,
       }
 
@@ -51,7 +51,7 @@ function RepertuarListItem({ item }) {
         })))
     }
     else {
-      dispatch(removeRepertuarSong(song._id))
+      dispatch(removeRepertuarSong(song.repertuarSongId))
         .then(() => dispatch(getListByUser(userId)))
         .then(() => setIsInclude(false))
         .then(() => (toast.error('Repertuardan  Çıkarıldı', {

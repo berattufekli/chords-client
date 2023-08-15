@@ -12,7 +12,7 @@ export default function Navbar() {
   console.log("isss", isAuthenticated)
 
   return (
-    <div as={"nav"} className='bg-indigo-700'>
+    <div as={"nav"} className='bg-indigo-700 shadow-sm'>
       <div className="mx-auto max-w-4xl px-4">
         <div className="flex h-14 items-center align- justify-between">
 

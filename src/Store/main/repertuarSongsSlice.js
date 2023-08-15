@@ -4,32 +4,41 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { toastr } from "react-redux-toastr";
-import axios from "axios";
+import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
+import { collection, updateDoc, deleteDoc, getDocs, doc, setDoc } from "firebase/firestore";
+import { uid } from 'uid';
 
 export const getRepertuarSongs = createAsyncThunk(
   "repertuarSongs/getRepertuarSongs",
   async () => {
-    const response = await axios.get('http://localhost:8080/api/repertuar-songs');
+    const repertuarSongsCollection = collection(db, "repertuarSongs");
+    const querySnapshot = await getDocs(repertuarSongsCollection);
 
-    let { data } = await response.data;
-    return data;
+    const repertuarSongsData = [];
+    querySnapshot.forEach((doc) => {
+      repertuarSongsData.push({ ...doc.data() });
+    });
+
+    return repertuarSongsData;
   }
 );
 
 export const addRepertuarSong = createAsyncThunk(
   "repertuarSongs/addRepertuarSong",
-  async (repertuar, { dispatch, getState }) => {
+  async (repertuarSong, { dispatch, getState }) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/repertuar-songs', repertuar);
-
-      let { data } = await response.data;
-      if (response.data.success === true) {
-        toastr.success("Başarılı", "Kayıt Eklendi");
-        return data;
+      let songData = {
+        ...repertuarSong,
+        repertuarSongId: uid(24),
+        createdDate: Date.now(),
       }
+      const songDocRef = doc(db, "repertuarSongs", songData.repertuarSongId);
+      await setDoc(songDocRef, songData);
+
+      toastr.success("Başarılı", "Şarkı Eklendi");
+      return { ...songData, success: true };
     } catch (error) {
       toastr.error("Hata", "Bir hata oluştu. Tekrar deneyiniz.");
-
       return null;
     }
   }
@@ -37,34 +46,39 @@ export const addRepertuarSong = createAsyncThunk(
 
 export const updateRepertuarSong = createAsyncThunk(
   "repertuarSongs/updateRepertuarSong",
-  async (repertuar, { dispatch, getState }) => {
-    const response = await axios.put(
-      `http://localhost:8080/api/lists/${repertuar._id}`,
-      repertuar);
+  async (song, { dispatch, getState }) => {
+    try {
+      const songRef = doc(db, "repertuarSongs", song.songId);
+      await updateDoc(songRef, song);
 
-    const { data } = await response.data;
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Güncellendi");
-      return { ...data, success: true };
+      toastr.success("Başarılı", "Şarkı Güncellendi");
+      return song;
+    } catch (error) {
+      console.log(error);
     }
-    return { ...data, success: false };;
   }
 );
 
 export const removeRepertuarSong = createAsyncThunk(
   "repertuarSongs/removeRepertuarSong",
   async (repertuarSongId, { dispatch, getState }) => {
-    const response = await axios.delete(`http://localhost:8080/api/repertuar-songs/${repertuarSongId}`);
-    if (response.data.success === true) {
-      toastr.success("Başarılı", "Kayıt Silindi");
-      return repertuarSongId;
+    try {
+      
+      const songNoteRef = doc(db, "repertuarSongs", repertuarSongId);  // Doğru belge referansını oluşturun
+
+      await deleteDoc(songNoteRef);  // Belge referansını kullanarak belgeyi silin
+
+      toastr.success("Başarılı", "Not Silindi");
+      return { repertuarSongId, success: true };
+    } catch (error) {
+      console.log(error);
+      return null;
     }
-    return repertuarSongId;
   }
 );
 
 const repertuarSongsAdapter = createEntityAdapter({
-  selectId: (list) => list._id,
+  selectId: (repertuarSong) => repertuarSong.repertuarSongId,
 });
 
 export const {

@@ -5,18 +5,21 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import Header from './Components/Header';
 import RepertuarList from './Components/RepertuarList';
+import { getSongs } from 'Store/main/songsSlice';
 
 function RepertuarDashboard() {
   const dispatch = useDispatch();
   const { id } = useParams();
 
   const [loading, setLoading] = useState(true);
+  const [songLoading, setSongLoading] = useState(true);
 
   useEffect(() => {
     dispatch(getListById(id)).then(() => setLoading(false));
+    dispatch(getSongs()).then(() => setSongLoading(false));
   }, [dispatch, id])
 
-  if(loading){
+  if (loading || songLoading) {
     return <Loading />
   }
 

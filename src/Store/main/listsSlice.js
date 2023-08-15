@@ -84,29 +84,69 @@ export const getListByUser = createAsyncThunk(
     const querySnapshot = await getDocs(q);
 
     const listsData = [];
-    querySnapshot.forEach((doc) => {
-      listsData.push({ ...doc.data() });
-    });
+
+    for (const doc of querySnapshot.docs) {
+      const list = { ...doc.data() };
+
+      // Şarkıları getir ve ekleyerek listeyi güncelle
+      const repertuarSongsCollection = collection(db, "repertuarSongs");
+      const songQuery = query(
+        repertuarSongsCollection,
+        where("listId", "==", list.listId)
+      );
+      const songQuerySnapshot = await getDocs(songQuery);
+
+      const songsData = [];
+      songQuerySnapshot.forEach((songDoc) => {
+        songsData.push({ ...songDoc.data() });
+      });
+
+      list.songs = songsData;
+
+      listsData.push(list);
+    }
 
     return listsData;
   }
 );
 
+
 export const getListById = createAsyncThunk(
   "lists/getListById",
   async (listId) => {
-    const listDocRef = doc(db, "lists", listId);
-    const listDocSnap = await getDoc(listDocRef);
+    const listsCollection = collection(db, "lists");
+    const q = query(listsCollection, where("listId", "==", listId));
 
-    if (listDocSnap.exists()) {
-      const listData = listDocSnap.data();
-      return { ...listData };
-    } else {
-      return null; // Eğer belirli listId'ye sahip kayıt bulunamazsa null dönebilirsiniz.
+    const querySnapshot = await getDocs(q);
+
+    const listsData = [];
+
+    for (const doc of querySnapshot.docs) {
+      const list = { ...doc.data() };
+
+      // Şarkıları getir ve ekleyerek listeyi güncelle
+      const repertuarSongsCollection = collection(db, "repertuarSongs");
+      const songQuery = query(
+        repertuarSongsCollection,
+        where("listId", "==", list.listId)
+      );
+      const songQuerySnapshot = await getDocs(songQuery);
+
+      const songsData = [];
+      songQuerySnapshot.forEach((songDoc) => {
+        songsData.push({ ...songDoc.data() });
+      });
+
+      list.songsData = songsData;
+
+      listsData.push(list);
     }
+
+
+
+    return listsData;
   }
 );
-
 
 
 const listsAdapter = createEntityAdapter({

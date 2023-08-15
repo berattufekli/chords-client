@@ -25,7 +25,7 @@ function LandingDashboard() {
   return (
     <div className='pt-4'>
       <PopularChords />
-      <RandomChords />
+
 
     </div>
   )

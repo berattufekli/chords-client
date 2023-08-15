@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
 import PopularChords from './Components/PopularChords'
-import RandomChords from './Components/RandomChords'
 import { useDispatch } from 'react-redux'
 import { getSongs } from 'Store/main/songsSlice';
 import Loading from 'Components/Loading/Loading';

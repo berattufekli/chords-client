@@ -9,57 +9,115 @@ import { uid } from 'uid';
 
 
 
-export const getSongs = createAsyncThunk("songs/getSongs", async () => {
-  const songsCollection = collection(db, "songs");
-  const querySnapshot = await getDocs(songsCollection);
+export const getSongs = createAsyncThunk(
+  "songs/getSongs",
+  async () => {
+    const songsCollection = collection(db, "songs");
+    const querySnapshot = await getDocs(songsCollection);
 
-  const songsData = [];
-  const promises = querySnapshot.docs.map(async (songDoc) => {
-    const songData = songDoc.data();
-    const songId = songData.songId;
+    const songsData = [];
+    const promises = querySnapshot.docs.map(async (songDoc) => {
+      const songData = songDoc.data();
+      const songId = songData.songId;
 
-    //artist info getirme
-    const artistId = songData.artistId;
-    const artistDocRef = doc(db, "artists", artistId);
-    const artistDocSnap = await getDoc(artistDocRef);
-    const artistData = artistDocSnap.data();
-  
+      //artist info getirme
+      const artistId = songData.artistId;
+      const artistDocRef = doc(db, "artists", artistId);
+      const artistDocSnap = await getDoc(artistDocRef);
+      const artistData = artistDocSnap.data();
 
-    //chords data getirme
-    const chordsInfo = [];
-    const chordsCollectionRef = collection(db, 'chords');
-    const chordsQuery = query(chordsCollectionRef, where('songId', '==', songId));
-    const chordsQuerySnapshot = await getDocs(chordsQuery);
-    chordsQuerySnapshot.forEach((doc) => {
-      chordsInfo.push(doc.data());
+
+      //chords data getirme
+      const chordsInfo = [];
+      const chordsCollectionRef = collection(db, 'chords');
+      const chordsQuery = query(chordsCollectionRef, where('songId', '==', songId));
+      const chordsQuerySnapshot = await getDocs(chordsQuery);
+      chordsQuerySnapshot.forEach((doc) => {
+        chordsInfo.push(doc.data());
+      });
+
+      //song chords data getirme
+      const chordsData = [];
+      const songChordsCollectionRef = collection(db, 'songChords');
+      const songChordsQuery = query(songChordsCollectionRef, where('songId', '==', songId));
+      const songChordsSnapshot = await getDocs(songChordsQuery);
+      songChordsSnapshot.forEach((doc) => {
+        chordsData.push(doc.data());
+      });
+
+      //şarkı bilgilerini birleştir
+      const songWithArtist = {
+        ...songData,
+        artistInfo: artistData,
+        artistId: artistId,
+        chordsInfo,
+        chordsData,
+      };
+      songsData.push(songWithArtist);
     });
 
-    //song chords data getirme
-    const chordsData = [];
-    const songChordsCollectionRef = collection(db, 'songChords');
-    const songChordsQuery = query(songChordsCollectionRef, where('songId', '==', songId));
-    const songChordsSnapshot = await getDocs(songChordsQuery);
-    songChordsSnapshot.forEach((doc) => {
-      chordsData.push(doc.data());
+    await Promise.all(promises); // Tüm asenkron işlemleri bekleyin
+
+    console.log(songsData);
+
+    return songsData;
+  }
+);
+
+export const getArtistSongs = createAsyncThunk(
+  "songs/getArtistSongs",
+  async (artistId) => {
+    const songsCollection = collection(db, "songs");
+    const querySnapshot = await getDocs(songsCollection);
+
+    const songsData = [];
+    const promises = querySnapshot.docs.map(async (songDoc) => {
+      const songData = songDoc.data();
+      const songId = songData.songId;
+
+      if (songData.artistId === artistId) {
+        // artist info getirme
+        const artistDocRef = doc(db, "artists", artistId);
+        const artistDocSnap = await getDoc(artistDocRef);
+        const artistData = artistDocSnap.data();
+
+        // chords data getirme
+        const chordsInfo = [];
+        const chordsCollectionRef = collection(db, 'chords');
+        const chordsQuery = query(chordsCollectionRef, where('songId', '==', songId));
+        const chordsQuerySnapshot = await getDocs(chordsQuery);
+        chordsQuerySnapshot.forEach((doc) => {
+          chordsInfo.push(doc.data());
+        });
+
+        // song chords data getirme
+        const chordsData = [];
+        const songChordsCollectionRef = collection(db, 'songChords');
+        const songChordsQuery = query(songChordsCollectionRef, where('songId', '==', songId));
+        const songChordsSnapshot = await getDocs(songChordsQuery);
+        songChordsSnapshot.forEach((doc) => {
+          chordsData.push(doc.data());
+        });
+
+        // şarkı bilgilerini birleştir
+        const songWithArtist = {
+          ...songData,
+          artistInfo: artistData,
+          artistId: artistId,
+          chordsInfo,
+          chordsData,
+        };
+        songsData.push(songWithArtist);
+      }
     });
 
-    //şarkı bilgilerini birleştir
-    const songWithArtist = {
-      ...songData,
-      artistInfo: artistData,
-      artistId: artistId,
-      chordsInfo,
-      chordsData,
-    };
-    songsData.push(songWithArtist);
-  });
+    await Promise.all(promises); // Tüm asenkron işlemleri bekleyin
 
-  await Promise.all(promises); // Tüm asenkron işlemleri bekleyin
+    console.log(songsData);
 
-  console.log(songsData);
-
-  return songsData;
-});
+    return songsData;
+  }
+);
 
 export const addSong = createAsyncThunk(
   "songs/addSong",
@@ -99,6 +157,7 @@ export const updateSong = createAsyncThunk(
         createdDate: song.createdDate,
         songId: song.songId,
         lyrics: song.lyrics,
+        rhythm: song.rhythm,
       };
 
       console.log(songData);
@@ -226,6 +285,7 @@ const songsSlice = createSlice({
     [removeSong.fulfilled]: (state, action) =>
       songsAdapter.removeOne(state, action.payload),
     [getSongs.fulfilled]: songsAdapter.setAll,
+    [getArtistSongs.fulfilled]: songsAdapter.setAll,
   },
 });
 

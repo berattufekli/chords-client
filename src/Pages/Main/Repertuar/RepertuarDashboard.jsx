@@ -24,7 +24,7 @@ function RepertuarDashboard() {
   }
 
   return (
-    <div className='flex flex-col max-w-4xl my-10 m-auto'>
+    <div className='flex flex-col pt-4 max-w-4xl px-2 my-1 m-auto'>
       <Header />
       <RepertuarList />
     </div>

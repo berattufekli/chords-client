@@ -17,6 +17,17 @@ function ListItem({ item }) {
     dispatch(openEditListDialog({ ...item }));
   }
 
+  const handleShare = () => {
+    const link = `http://localhost:3000/repertuar/${item.listId}`;
+
+    try {
+      navigator.clipboard.writeText(link);
+    } catch (error) {
+      console.log(error);
+      alert(error);
+    }
+  }
+
   return (
     <div className='sm:items-center flex-row justify-between border-[1px] shadow-sm rounded-md p-2 flex my-2'>
       <div className='flex items-center '>
@@ -31,7 +42,7 @@ function ListItem({ item }) {
 
       <div className='flex gap-2'>
         <button
-          // onClick={handleEditList}
+          onClick={handleShare}
           className="flex justify-center items-center rounded-md bg-blue-700 px-1  py-1 text-sm font-semibold leading-6 text-white shadow-md transition-all hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           <ShareIcon className='w-5 h-5' />

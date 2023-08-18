@@ -4,7 +4,7 @@ import { removeRepertuarSong } from 'Store/main/repertuarSongsSlice';
 import { addRepertuarSong } from 'Store/main/repertuarSongsSlice';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify';
 
 function RepertuarListItem({ item }) {
@@ -70,9 +70,9 @@ function RepertuarListItem({ item }) {
     <div className='border-[1px] items-center justify-between shadow-sm rounded-md p-2 flex my-1'>
       <div className='flex items-center'>
         <input onChange={handleSubmit} type="checkbox" checked={isInclude ? true : false} className='mr-4 w-5 h-5 text-indigo-600 border-gray-400 focus:ring-indigo-600 rounded-md' />
-        <p className='text-gray-700 font-semibold'>
+        <Link to={`/repertuar/${item.listId}`} className='text-gray-700 font-semibold'>
           {item.listName}
-        </p>
+        </Link>
       </div>
 
       <div className='flex items-center'>

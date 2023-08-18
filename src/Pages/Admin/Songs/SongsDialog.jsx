@@ -18,6 +18,7 @@ const defaultFormState = {
   artistId: "",
   originalTone: "",
   easyTone: "",
+  rhythm: "",
 };
 
 export default function SongDialog() {
@@ -144,9 +145,9 @@ export default function SongDialog() {
                         <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
                           <input
                             type="text"
-                            name="_id"
-                            id="_id"
-                            value={form._id}
+                            name="songId"
+                            id="songId"
+                            value={form.songId}
                             onChange={handleChange}
                             disabled
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -230,6 +231,25 @@ export default function SongDialog() {
                             onChange={handleChange}
                             className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                             placeholder="Kolay Ton Giriniz"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-span-full">
+                      <label htmlFor="username" className="block text-sm font- leading-6 text-gray-900">
+                        Ritim
+                      </label>
+                      <div className="mt-1">
+                        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                          <input
+                            type="text"
+                            name="rhythm"
+                            id="rhythm"
+                            value={form.rhythm}
+                            onChange={handleChange}
+                            className="block flex-1 border-0 m-1 ml-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                            placeholder="Ritim Giriniz"
                           />
                         </div>
                       </div>

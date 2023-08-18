@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import { toastr } from "react-redux-toastr";
 import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
-import { collection, updateDoc, deleteDoc, getDocs, doc, setDoc } from "firebase/firestore";
+import { collection, updateDoc, deleteDoc, getDocs, doc, setDoc, getDoc } from "firebase/firestore";
 import { uid } from 'uid';
 
 export const getArtists = createAsyncThunk(
@@ -20,6 +20,26 @@ export const getArtists = createAsyncThunk(
     });
 
     return artistsData;
+  }
+);
+
+
+export const getArtist = createAsyncThunk(
+  "artists/getArtist",
+  async (artistId) => {
+    const artistRef = doc(db, "artists", artistId);
+    const artistSnapshot = await getDoc(artistRef);
+
+
+    const artist = [];
+
+
+    if (artistSnapshot.exists()) {
+      artist.push(artistSnapshot.data())
+      return artist;
+    } else {
+      throw new Error("Artist not found");
+    }
   }
 );
 
@@ -172,6 +192,7 @@ const artistsSlice = createSlice({
     [removeArtist.fulfilled]: (state, action) =>
       artistsAdapter.removeOne(state, action.payload),
     [getArtists.fulfilled]: artistsAdapter.setAll,
+    [getArtist.fulfilled]: artistsAdapter.setAll,
   },
 });
 

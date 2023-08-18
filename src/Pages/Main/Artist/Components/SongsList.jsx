@@ -2,27 +2,23 @@ import { selectLists } from 'Store/main/listsSlice';
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import RepertuarEmpty from './RepertuarEmpty';
 import { selectSongs } from 'Store/main/songsSlice';
 import TurkishtoEnglish from 'lib/TurkishToEnglish';
 
 
-function RepertuarList() {
-  const list = useSelector(selectLists);
+function SongList() {
   const songs = useSelector(selectSongs);
-  console.log("bak", list);
 
 
-  console.log(list);
 
-  if (list[0].songsData.length === 0) {
-    return <RepertuarEmpty />
+  if (songs.length === 0) {
+    return null
   }
 
   return (
     <div className={`w-full grid m-auto max-w-4xl py-4 flex-auto overflow-hidden rounded-md bg-white text-sm leading-6 shadow-md ring-1 ring-gray-900/5`}>
       <div className='px-4 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 transition-all'>
-        {list[0].songsData.map((item, key) => {
+        {songs.map((item, key) => {
           const songInfo = songs.find((f) => f.songId === item.songId);
           const { artistInfo } = songInfo
 
@@ -53,4 +49,4 @@ function RepertuarList() {
   )
 }
 
-export default RepertuarList
+export default SongList

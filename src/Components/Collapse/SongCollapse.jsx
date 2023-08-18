@@ -14,7 +14,7 @@ function SongCollapse({ items, title, open }) {
 
 
   return (
-    <div className="mt-1 flex w-full px-2 ">
+    <div className="mt-1 flex w-full px-2">
       <div className="w-screen grid m-auto max-w-4xl flex-auto overflow-hidden rounded-lg bg-white text-sm leading-6 shadow-sm ring-1 ring-gray-900/5">
         <div className="px-2 sm:px-4 py-0 sm:py-1 grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 transition-all">
           <div onClick={toggleCollapse} className='col-span-full cursor-pointer flex items-center justify-between'>

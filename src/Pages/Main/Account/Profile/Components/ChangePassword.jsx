@@ -55,7 +55,7 @@ function ChangePassword() {
       <p className='font-bold py-2 mt-2  text-gray-700 text-lg'>Şifreyi Değiştir</p>
 
       <div>
-        <label htmlFor="password" className="text-sm font-medium leading-6">
+        <label htmlFor="currentPassword" className="text-sm font-medium leading-6">
           Mevcut Şifre
         </label>
         <div className="mt-2 flex group items-center w-full">
@@ -65,7 +65,8 @@ function ChangePassword() {
             name="currentPassword"
             type={"password"}
             value={form.currentPassword}
-            autoComplete="nope"
+            autoComplete="off"
+            spellCheck="false"
             onChange={handleChange}
             required
             placeholder='Mevcut şifrenizi giriniz'
@@ -80,7 +81,7 @@ function ChangePassword() {
       </div>
 
       <div>
-        <label htmlFor="password" className="text-sm font-medium leading-6">
+        <label htmlFor="newPassword" className="text-sm font-medium leading-6">
           Yeni Şifre
         </label>
         <div className="mt-2 flex group items-center w-full">
@@ -106,7 +107,7 @@ function ChangePassword() {
       </div>
 
       <div>
-        <label htmlFor="password" className="text-sm font-medium leading-6">
+        <label htmlFor="confirmPassword" className="text-sm font-medium leading-6">
           Yeni Şifre Onay
         </label>
         <div className="mt-2 flex group items-center w-full">

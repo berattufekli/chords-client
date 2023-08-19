@@ -20,5 +20,13 @@
     <loc>http://localhost:3000/akor/emir-can-igrek/muzik-kutusu/541dfb0ee1c1fa9b187485b1</loc>
     <lastmod>2023-08-19</lastmod>
   </url>
+  <url>
+    <loc>http://localhost:3000/akor/emir-can-igrek/muzik-kutusu/753b499a14b1c9bda10dc8d3</loc>
+    <lastmod>2023-08-19</lastmod>
+  </url>
+  <url>
+    <loc>http://localhost:3000/akor/emir-can-igrek/muzik-kutusu/cb35bc2ff49dd74207de9e89</loc>
+    <lastmod>2023-08-19</lastmod>
+  </url>
   <!-- Diğer dinamik URL'leri buraya ekleyin -->
 </urlset>

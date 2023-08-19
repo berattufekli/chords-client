@@ -14,6 +14,7 @@ import Loading from "Components/Loading/Loading";
 import { loadUser } from "Store/auth/authSlice";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { Helmet } from "react-helmet";
 
 function App() {
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ function App() {
   if (userAuth === "admin") {
     return (
       <AdminLayout>
+
         <ToastContainer />
         <Routes>
           {getRoutes(AdminRoutes)}
@@ -93,6 +95,13 @@ function App() {
     console.log("student render redildi");
     return (
       <MainLayout>
+        <Helmet>
+          <meta property="og:title" content={"Akorlar Berat Tüfekli"} />
+          <meta property='og:url' content='https://chords-berattufekli.netlify.app' />
+          <meta property='og:site_name' content='Akorlar Berat Tüfekli' />
+          <meta property='og:author' content='Hüseyin Berat Tüfekli' />
+          <meta property='og:publisher' content='Hüseyin Berat Tüfekli' />
+        </Helmet>
         <ToastContainer />
         <Routes>
           {getRoutes(AuthenticatedRoutes)}

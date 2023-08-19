@@ -1,5 +1,4 @@
 import Loading from 'Components/Loading/Loading';
-import { getArtist } from 'Store/main/artistsSlice';
 import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';

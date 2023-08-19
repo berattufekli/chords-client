@@ -1,5 +1,3 @@
-import { selectArtists } from 'Store/main/artistsSlice';
-import { selectLists } from 'Store/main/listsSlice'
 import { selectSongs } from 'Store/main/songsSlice';
 import React from 'react'
 import { useSelector } from 'react-redux'

@@ -154,7 +154,7 @@ export const loadUser = createAsyncThunk(
       return ({
         success: true,
         userAuth: "student",
-        isAuthenticated: true,
+        isAuthenticated: false,
       });
     }
   }

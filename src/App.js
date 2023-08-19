@@ -15,10 +15,6 @@ import { loadUser } from "Store/auth/authSlice";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { Helmet } from "react-helmet";
-import ReactGA from "react-ga";
-
-const TRACKING_ID = "G-TLXX268MM3";
-ReactGA.initialize(TRACKING_ID);
 
 function App() {
   const dispatch = useDispatch();

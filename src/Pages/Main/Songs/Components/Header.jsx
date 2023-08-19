@@ -19,6 +19,10 @@ function Header() {
     <div className='px-4 py-4'>
       <Helmet>
         <title>{`${artistName} - ${songName}`}</title>
+        <meta property='og:url' content='https://chords-berattufekli.netlify.app'/>
+        <meta property='og:site_name' content='Akorlar Berat Tüfekli'/>
+        <meta property='og:author' content='Hüseyin Berat Tüfekli'/>
+        <meta property='og:publisher' content='Hüseyin Berat Tüfekli'/>
         <meta name="description" content={`Dinlediğiniz şarkı: ${songName} - ${artistName}`} />
         <meta property="og:title" content={`${artistName} - ${songName}`} />
         <meta property="og:description" content={`Dinlediğiniz şarkı: ${songName} - ${artistName}`} />

@@ -2,11 +2,10 @@ import {
   createSlice,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import axios from "axios";
 import { db } from "lib/firebase";
-import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, updateDoc, setDoc } from "firebase/firestore";
 import { auth } from "lib/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@firebase/auth";
+import { EmailAuthProvider, createUserWithEmailAndPassword, reauthenticateWithCredential, signInWithEmailAndPassword, updateEmail, updatePassword } from "@firebase/auth";
 
 
 
@@ -31,8 +30,8 @@ export const register = createAsyncThunk(
         userId: firebaseUser.uid,
       };
 
-      // "users" koleksiyonuna veri eklemek
-      await addDoc(collection(db, "userData"), userData);
+      const userDataDocRef = doc(db, "userData", userData.userId);
+      await setDoc(userDataDocRef, userData);
 
       return ({
         ...userData,
@@ -83,20 +82,45 @@ export const login = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (userData) => {
+    try {
+      // Kullanıcının kimlik bilgilerini al
+      const user = auth.currentUser;
+      const credentials = EmailAuthProvider.credential(userData.email, userData.currentPassword);
+
+      // Kullanıcının kimlik bilgilerini yeniden doğrula
+      await reauthenticateWithCredential(user, credentials);
+
+      // Şifreyi güncelle
+      await updatePassword(user, userData.newPassword);
+
+      return { success: true, message: "Şifre güncellendi." };
+    } catch (error) {
+      return { success: false, message: "Şifre güncelleme işlemi başarısız oldu." };
+    }
+  }
+);
+
 export const updateUserInformation = createAsyncThunk(
   "auth/updateUserInformation",
   async (user, { dispatch, getState }) => {
     try {
 
-      const response = await axios.put(`http://localhost:8080/api/auth/update-user-information/${user.userId}`, user);
+      await updateEmail(auth.currentUser, user.email);
 
-      console.log(response);
+      let userData = {
+        userId: user.userId,
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+      };
 
-      let data = await response.data;
-      if (response.data.success) {
-        localStorage.setItem("token", data.access_token);
-        return { ...data, succes: true };
-      }
+      const userRef = doc(db, "userData", user.userId); // Belge referansı
+      await updateDoc(userRef, userData);
+
+      return { ...user, ...userData, success: true };
     } catch (error) {
       console.log(error);
     }
@@ -108,8 +132,8 @@ export const loadUser = createAsyncThunk(
     try {
       const userId = localStorage.getItem("userId");
       if (userId) {
-        
-        
+
+
         const usersCollection = collection(db, "userData");
         const q = query(usersCollection, where("userId", "==", userId));
         const querySnapshot = await getDocs(q);

@@ -1,8 +1,10 @@
 import { AtSymbolIcon, UserIcon } from '@heroicons/react/24/outline'
 import useForm from 'Hooks/useForm'
+import { loadUser } from 'Store/auth/authSlice'
 import { updateUserInformation } from 'Store/auth/authSlice'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const defaultFormState = {
   userId: "",
@@ -22,7 +24,31 @@ function ChangeUserInformation() {
   }, [auth, setForm]);
 
   const handleSubmit = () => {
-    dispatch(updateUserInformation(form));
+    dispatch(updateUserInformation(form))
+      .then((params) => {
+        try {
+          if (params.payload.success) {
+            toast.success('Kullanıcı Bilgileri Güncellendi👌', {
+              position: 'bottom-center',
+              autoClose: 5000, // 3 saniye sonra otomatik olarak kapanacak
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+            });
+          }
+        } catch (error) {
+          toast.error('Kullanıcı Bilgileri Güncellenemedi 🤯', {
+            position: 'bottom-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
+      })
+      .then(() => loadUser());
   }
 
   return (

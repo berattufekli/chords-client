@@ -8,6 +8,7 @@ const applicationSlice = createSlice({
       showSpecialNote: false,
       showNewList: false,
       showRepertuarList: false,
+      showRhythm: false,
     },
 
   },

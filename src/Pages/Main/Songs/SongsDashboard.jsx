@@ -12,6 +12,7 @@ import NotFound from '../404/NotFound';
 import SpecialNote from './Components/SpecialNote/SpecialNote';
 import RepertuarList from './Components/Repertuar/RepertuarList';
 import { getSongNoteSongAndUserId } from 'Store/main/songNotesSlice';
+import Rhythm from './Components/Rhythm/Rhythm';
 
 function SongsDashboard() {
   const { id } = useParams();
@@ -55,6 +56,7 @@ function SongsDashboard() {
         <Header />
         <div className='w-full h-[1px] bg-slate-200 rounded-sm'></div>
         <Settings />
+        <Rhythm />
         <RepertuarList />
         <SpecialNote />
         <div className='w-full h-[1px] bg-slate-200 rounded-sm'></div>

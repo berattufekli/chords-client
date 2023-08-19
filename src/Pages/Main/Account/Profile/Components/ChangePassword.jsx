@@ -1,6 +1,9 @@
 import { EyeIcon, EyeSlashIcon, LockClosedIcon } from '@heroicons/react/24/outline'
 import useForm from 'Hooks/useForm'
+import { changePassword } from 'Store/auth/authSlice';
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const defaultFormState = {
   currentPassword: "",
@@ -9,13 +12,43 @@ const defaultFormState = {
 }
 
 function ChangePassword() {
+  const dispatch = useDispatch();
+
   const [showPassword, setShowPassword] = useState(false);
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   }
+  const auth = useSelector((state) => state.auth);
 
-  const { form, handleChange } = useForm(defaultFormState);
+  const { form, handleChange, setForm } = useForm(defaultFormState);
 
+  const handleChangePassword = () => {
+    let data = {
+      ...auth,
+      ...form,
+    }
+    dispatch(changePassword(data))
+      .then((params) => {
+        try {
+          if (params.payload.success) {
+            toast.success('Parola Güncellendi👌', {
+              position: 'bottom-center',
+              autoClose: 5000, // 3 saniye sonra otomatik olarak kapanacak
+              hideProgressBar: false,
+              closeOnClick: true,
+            });
+          }
+        } catch (error) {
+          toast.error('Parola Güncellenemedi 🤯', {
+            position: 'bottom-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+          });
+        }
+      })
+      .then(() => setForm(defaultFormState));
+  }
 
   return (
     <div className='bg-white rounded-lg shadow-lg px-4 space-y-2'>
@@ -101,6 +134,7 @@ function ChangePassword() {
 
       <div className='flex justify-end'>
         <button
+          onClick={handleChangePassword}
           className="flex my-4 justify-center items-center rounded-md bg-indigo-600 px-7 py-1 text-sm font-semibold leading-6 text-white shadow-md transition-all hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Şifreyi Güncelle

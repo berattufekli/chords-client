@@ -10,7 +10,9 @@ function RepertuarButton() {
     dispatch(setSettings({
       ...settings,
       showSpecialNote: false,
+      showRhythm: false,
       showRepertuarList: !settings.showRepertuarList,
+
     }))
   }
 

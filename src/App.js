@@ -97,8 +97,8 @@ function App() {
       <MainLayout>
         <Helmet>
           <meta property="og:title" content={"Akorlar Berat Tüfekli"} />
-          <meta property='og:url' content='https://chords-berattufekli.netlify.app' />
-          <meta property='og:site_name' content='Akorlar Berat Tüfekli' />
+          <meta property='og:url' content='https://akorflex.com' />
+          <meta property='og:site_name' content='akorflex' />
           <meta property='og:author' content='Hüseyin Berat Tüfekli' />
           <meta property='og:publisher' content='Hüseyin Berat Tüfekli' />
         </Helmet>

@@ -12,8 +12,12 @@
     <loc>https://www.akorflex.com/register</loc>
     <lastmod>2023-08-19</lastmod>
   </url>
-    <url>
+  <url>
     <loc>https://akorflex.com/repertuar/4a58d04ed5adffe366854bca</loc>
+    <lastmod>2023-08-19</lastmod>
+  </url>
+  <url>
+    <loc>http://localhost:3000/akor/emir-can-igrek/muzik-kutusu/541dfb0ee1c1fa9b187485b1</loc>
     <lastmod>2023-08-19</lastmod>
   </url>
   <!-- Diğer dinamik URL'leri buraya ekleyin -->

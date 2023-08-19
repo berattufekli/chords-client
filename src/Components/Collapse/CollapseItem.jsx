@@ -21,7 +21,7 @@ function turkishtoEnglish(input) {
 function CollapseItem({ item }) {
   return (
     <Link to={
-      `/akor/${turkishtoEnglish(item.artistInfo.artistName.split(" ").join("-").toLowerCase())}/${turkishtoEnglish(item.songName.toLowerCase())}/${item.songId}`}>
+      `/akor/${turkishtoEnglish(item.artistInfo.artistName.split(" ").join("-").toLowerCase())}/${turkishtoEnglish(item.songName.split(" ").join("-").toLowerCase())}/${item.songId}`}>
       <div className="group relative flex gap-x-6 rounded-lg p-4 items-center transition-all hover:bg-indigo-100">
         <div className="flex overflow-hidden w-12 h-12 flex-none items-center justify-center rounded-lg">
           <img

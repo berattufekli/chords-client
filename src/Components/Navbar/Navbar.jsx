@@ -20,9 +20,9 @@ export default function Navbar() {
             <Link
               to={"/"}>
               <img
-                className="block h-8 w-auto"
+                className="block h-8 w-8"
                 src={Logo}
-                alt="Your Company"
+                alt="akorflex.com"
               />
             </Link>
           </div>
@@ -39,7 +39,7 @@ export default function Navbar() {
           <div className="flex items-center justify-center">
             <Link
               to={isAuthenticated ? "/hesap" : "/login"}>
-              <UserIcon className="h-8 w-8 text-indigo-100 hover:text-white transition-all" aria-hidden="true" />
+              <UserIcon className="h-8 w-8 text-indigo-100 hover:text-white transition-all" aria-hidden="true"/>
             </Link>
           </div>
         </div>

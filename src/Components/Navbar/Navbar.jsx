@@ -16,32 +16,26 @@ export default function Navbar() {
       <div className="mx-auto max-w-4xl px-4">
         <div className="flex h-14 items-center align- justify-between">
 
-          <div className="flex items-center justify-center">
-            <Link
-              to={"/"}>
-              <img
-                className="block h-8 w-8"
-                src={Logo}
-                alt="akorflex.com"
-              />
-            </Link>
-          </div>
+          <Link
+            to={"/"}>
+            <img
+              className="block h-8 w-8"
+              src={Logo}
+              alt="akorflex.com"
+            />
+          </Link>
 
-          <div className="flex items-center justify-center">
-            <Link
-              to={"/"}
-              className="rounded-lg bg-transparent p-1 text-indigo-100 hover:text-white transition-all"
-            >
-              <HomeIcon className="h-8 w-8 text-indigo-100 hover:text-white transition-all" aria-hidden="true" />
-            </Link>
-          </div>
+          <Link
+            to={"/"}
+            className="rounded-lg bg-transparent p-1 text-indigo-100 hover:text-white transition-all"
+          >
+            <HomeIcon className="h-8 w-8 text-indigo-100 hover:text-white transition-all" aria-hidden="true" />
+          </Link>
 
-          <div className="flex items-center justify-center">
-            <Link
-              to={isAuthenticated ? "/hesap" : "/login"}>
-              <UserIcon className="h-8 w-8 text-indigo-100 hover:text-white transition-all" aria-hidden="true"/>
-            </Link>
-          </div>
+          <Link
+            to={isAuthenticated ? "/hesap" : "/login"}>
+            <UserIcon className="h-8 w-8 text-indigo-100 hover:text-white transition-all" aria-hidden="true" />
+          </Link>
         </div>
       </div>
 

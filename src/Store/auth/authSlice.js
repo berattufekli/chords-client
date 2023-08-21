@@ -3,7 +3,7 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import { db } from "lib/firebase";
-import { collection, query, where, getDocs, doc, updateDoc, setDoc } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, updateDoc, setDoc } from "@firebase/firestore";
 import { auth } from "lib/firebase";
 import { EmailAuthProvider, createUserWithEmailAndPassword, reauthenticateWithCredential, signInWithEmailAndPassword, updateEmail, updatePassword } from "@firebase/auth";
 

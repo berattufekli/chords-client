@@ -4,7 +4,7 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
-import { collection, updateDoc, deleteDoc, getDocs, doc, getDoc, setDoc, query, where } from "firebase/firestore";
+import { collection, updateDoc, deleteDoc, getDocs, doc, getDoc, setDoc, query, where } from "@firebase/firestore";
 import { uid } from 'uid';
 
 

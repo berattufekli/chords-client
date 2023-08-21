@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import { toastr } from "react-redux-toastr";
 import { db } from "lib/firebase"; // Firebase Firestore yapılandırması
-import { collection, updateDoc, deleteDoc, getDocs, doc, setDoc, where, query } from "firebase/firestore";
+import { collection, updateDoc, deleteDoc, getDocs, doc, setDoc, where, query } from "@firebase/firestore";
 import { uid } from 'uid';
 
 export const getLists = createAsyncThunk(

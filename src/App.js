@@ -96,7 +96,7 @@ function App() {
     return (
       <MainLayout>
         <Helmet>
-          <meta property="og:title" content={"Akorlar Berat Tüfekli"} />
+          <title>AkorFlex | Akorlar, Şarkılar, Şarkı Sözleri, Notalar</title>
           <meta property='og:url' content='https://akorflex.com' />
           <meta property='og:site_name' content='akorflex' />
           <meta property='og:author' content='Hüseyin Berat Tüfekli' />

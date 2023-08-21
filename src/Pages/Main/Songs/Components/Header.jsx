@@ -19,10 +19,10 @@ function Header() {
     <div className='px-4 py-4'>
       <Helmet>
         <title>{`${artistName} - ${songName}`}</title>
-        <meta property='og:url' content='https://akorflex.com'/>
-        <meta property='og:site_name' content='Akorlar Berat Tüfekli'/>
-        <meta property='og:author' content='Hüseyin Berat Tüfekli'/>
-        <meta property='og:publisher' content='Hüseyin Berat Tüfekli'/>
+        <meta property='og:url' content='https://akorflex.com' />
+        <meta property='og:site_name' content='Akorlar Berat Tüfekli' />
+        <meta property='og:author' content='Hüseyin Berat Tüfekli' />
+        <meta property='og:publisher' content='Hüseyin Berat Tüfekli' />
         <meta name="description" content={`Dinlediğiniz şarkı: ${songName} - ${artistName}`} />
         <meta property="og:title" content={`${artistName} - ${songName}`} />
         <meta property="og:description" content={`Dinlediğiniz şarkı: ${songName} - ${artistName}`} />
@@ -33,12 +33,12 @@ function Header() {
         <div className='flex sm:items-center flex-col sm:flex-row gap-0 sm:gap-2'>
           <Link to={
             `/artist/${TurkishtoEnglish(song.artistInfo.artistName.split(" ").join("-").toLowerCase())}/${song.artistInfo.artistId}`}>
-            <p className='transition-all hover:underline underline-offset-4 inline-block text-xl'>
+            <h1 className='transition-all hover:underline underline-offset-4 inline-block text-xl'>
               {song.artistInfo.artistName}
-            </p>
+            </h1>
           </Link>
           <p className='hidden sm:flex'>-</p>
-          <p className='text-xl'>{song.songName}</p>
+          <h1 className='text-xl'>{song.songName}</h1>
         </div>
       </div>
 

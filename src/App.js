@@ -101,6 +101,8 @@ function App() {
           <meta property='og:site_name' content='akorflex' />
           <meta property='og:author' content='Hüseyin Berat Tüfekli' />
           <meta property='og:publisher' content='Hüseyin Berat Tüfekli' />
+          <meta name="keywords" content="akor, gitar akorları, tab, repertuar, akorlar, şarkılar, şarkı sözleri, şarkı akorları" />
+          <meta name="description" content="Akor, Gitar Akorları, Tab, Repertuar, Akorlar, Şarkılar, Şarkı Sözleri, Şarkı Akorları" />
         </Helmet>
         <ToastContainer />
         <Routes>

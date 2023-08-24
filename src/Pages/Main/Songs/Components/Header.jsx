@@ -3,14 +3,14 @@ import TurkishtoEnglish from 'lib/TurkishToEnglish';
 import React from 'react'
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 
 
 function Header() {
 
   const { id } = useParams();
 
-
+  const location = useLocation();
 
   const song = useSelector((state) => selectSongById(state, id))
   const { artistName } = song.artistInfo;
@@ -18,13 +18,15 @@ function Header() {
   return (
     <div className='px-4 py-4'>
       <Helmet>
-        <title>{`${artistName} - ${songName}`}</title>
+        <link rel="canonical" href={location.pathname} />
+        <meta name="robots" content="index,follow" />
+        <title>{`${artistName} - ${songName} - Akor (Kolay ve Orijinal Ton)`}</title>
         <meta property='og:url' content='https://akorflex.com' />
-        <meta property='og:site_name' content='Akorlar Berat Tüfekli' />
+        <meta property='og:site_name' content='AkorF' />
         <meta property='og:author' content='Hüseyin Berat Tüfekli' />
         <meta property='og:publisher' content='Hüseyin Berat Tüfekli' />
-        <meta name="description" content={`Dinlediğiniz şarkı: ${songName} - ${artistName}`} />
-        <meta property="og:title" content={`${artistName} - ${songName}`} />
+        <meta name="description" content={`${songName} - ${artistName} akor, kolay ve orjinal ton gitar akorları, ${artistName} cevapsiz ${artistName} | AkorFlex.com`} />
+        <meta property="og:title" content={`${artistName} - ${songName} Akor (Kolay ve Orjinal Ton)`} />
         <meta property="og:description" content={`Dinlediğiniz şarkı: ${songName} - ${artistName}`} />
       </Helmet>
       <div className='flex items-center gap-2 font-bold text-gray-700 text-xl'>
